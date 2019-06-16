@@ -100,7 +100,7 @@ render() {
 // export default App
 
 
-
+//need to add when a user is signed in for the header component
 class Header extends Component {
 
 render() {
@@ -133,33 +133,4 @@ class App extends Component {
 }
 export default App
 
-// class App extends Component {
 
-//   //State is created to handle the images from flickr's API and the topic to be searched
-//   constructor() {
-//     super();
-//     this.state = {
-//       data: ''
-//     }
-//   }
-//   //Images are immediately loaded to the page with the props search topic
-//   componentDidMount() {
-//     axios.get(`http://localhost:5000`).then((response) => {
-//       const data = response.data;
-//       console.log(data);
-//       this.setState({data});
-//     })
-//     .catch(error => {
-//       console.log('Error fetching and parsing data.', error);
-//     }); 
-//   }
-
-// render() {
-//     return(
-//         <div> 
-//           { this.state.data.message}
-//         </div>
-//     );
-//   }
-// }
-// export default App
