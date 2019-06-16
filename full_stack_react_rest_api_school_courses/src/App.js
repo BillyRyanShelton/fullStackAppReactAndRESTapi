@@ -4,6 +4,31 @@ import axios from 'axios';
 
 
 
+// class CourseDetail extends Component {
+
+
+//   // //Images are immediately loaded to the page with the props search topic
+//   // componentDidMount() {
+//   //   axios.get(`http://localhost:5000/api/courses`).then((response) => {
+//   //     const data = response.data.courses;
+//   //     console.log(data);
+//   //     this.setState({data});
+//   //   })
+//   //   .catch(error => {
+//   //     console.log('Error fetching and parsing data.', error);
+//   //   }); 
+//   // }
+
+// render() {
+//     return(
+
+//     );
+//   }
+// }
+// // export default App
+
+
+
 class Courses extends Component {
 
   constructor() {
@@ -47,24 +72,13 @@ render() {
       <html lang="en">
 
         <head>
-          <meta charset="utf-8"/>
-          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-          <link rel="shortcut icon" href="/favicon.ico"/>
-          <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,500" rel="stylesheet" type="text/css"/>
-          <link href="https://fonts.googleapis.com/css?family=Cousine" rel="stylesheet" type="text/css"/>
-          <link href="../styles/global.css" rel="stylesheet"/>
           <title>Courses</title>
         </head>
 
         <body>
           <div id="root">
             <div>
-              <div class="header">
-                <div class="bounds">
-                  <h1 class="header--logo">Courses</h1>
-                  <nav><a class="signup" href="sign-up.html">Sign Up</a><a class="signin" href="sign-in.html">Sign In</a></nav>
-                </div>
-              </div>
+              <Header/>
               <hr/>
               <div class="bounds">
                 {courses}
@@ -84,6 +98,27 @@ render() {
   }
 }
 // export default App
+
+
+
+class Header extends Component {
+
+render() {
+    return(
+      <div class="header">
+        <div class="bounds">
+          <h1 class="header--logo">Courses</h1>
+          <nav><a class="signup" href="sign-up.html">Sign Up</a><a class="signin" href="sign-in.html">Sign In</a></nav>
+        </div>
+      </div>
+    );
+  }
+}
+// export default App
+
+
+
+
 
 class App extends Component {
   render() {
