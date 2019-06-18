@@ -4,31 +4,73 @@ import axios from 'axios';
 
 
 
+class UserSignOut extends Component {
+
+render() {
+    return(
+      <div>
+      </div>
+    );
+  }
+}
+// export default App
+
+class UserSignUp extends Component {
+
+render() {
+    return(
+      <div>
+      </div>
+    );
+  }
+}
+// export default App
+
+class UserSignIn extends Component {
+
+render() {
+    return(
+      <div>
+      </div>
+    );
+  }
+}
+// export default App
+
+class CourseDetail extends Component {
 
 
+  // //Images are immediately loaded to the page with the props search topic
+  // componentDidMount() {
+  //   axios.get(`http://localhost:5000/api/courses`).then((response) => {
+  //     const data = response.data.courses;
+  //     console.log(data);
+  //     this.setState({data});
+  //   })
+  //   .catch(error => {
+  //     console.log('Error fetching and parsing data.', error);
+  //   }); 
+  // }
 
-// class CourseDetail extends Component {
-
-
-//   // //Images are immediately loaded to the page with the props search topic
-//   // componentDidMount() {
-//   //   axios.get(`http://localhost:5000/api/courses`).then((response) => {
-//   //     const data = response.data.courses;
-//   //     console.log(data);
-//   //     this.setState({data});
-//   //   })
-//   //   .catch(error => {
-//   //     console.log('Error fetching and parsing data.', error);
-//   //   }); 
-//   // }
-
-// render() {
-//     return(
-
-//     );
-//   }
-// }
+render() {
+    return(
+      <div>
+      </div>
+    );
+  }
+}
 // // export default App
+
+class UpdateCourse extends Component {
+
+render() {
+    return(
+      <div>
+      </div>
+    );
+  }
+}
+// export default App
 
 class CreateCourse extends Component {
 
