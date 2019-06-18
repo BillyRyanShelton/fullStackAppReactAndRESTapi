@@ -4,6 +4,9 @@ import axios from 'axios';
 
 
 
+
+
+
 // class CourseDetail extends Component {
 
 
@@ -27,7 +30,16 @@ import axios from 'axios';
 // }
 // // export default App
 
+class CreateCourse extends Component {
 
+render() {
+    return(
+      <div>
+      </div>
+    );
+  }
+}
+// export default App
 
 class Courses extends Component {
 
@@ -72,6 +84,12 @@ render() {
       <html lang="en">
 
         <head>
+          <meta charset="utf-8"/>
+          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+          <link rel="shortcut icon" href="/favicon.ico"/>
+          <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,500" rel="stylesheet" type="text/css"/>
+          <link href="https://fonts.googleapis.com/css?family=Cousine" rel="stylesheet" type="text/css"/>
+          <link href="App.css" rel="stylesheet"/>
           <title>Courses</title>
         </head>
 
@@ -126,6 +144,12 @@ class App extends Component {
       <BrowserRouter>
         <Switch>
           <Route exact path='/' render={() => <Courses/>}/>
+          <Route exact path='/courses/create' render={() => <CreateCourse/>}/>
+          <Route exact path='/courses/:id/update' render={() => <UpdateCourse/>}/>
+          <Route exact path='/courses/:id' render={() => <CourseDetail/>}/>
+          <Route exact path='/signin' render={() => <UserSignIn/>}/>
+          <Route exact path='/signup' render={() => <UserSignUp/>}/>
+          <Route exact path='/signout' render={() => <UserSignOut/>}/>
         </Switch>
       </BrowserRouter>
     );
