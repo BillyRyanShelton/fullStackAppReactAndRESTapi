@@ -76,7 +76,8 @@ class CreateCourse extends Component {
 
 render() {
     return(
-      <div>
+      <div> 
+      <h1>hello</h1>
       </div>
     );
   }
@@ -111,11 +112,11 @@ render() {
     let courses;
     if(data.length > 0) {
       courses = data.map( (course) => 
-          <div class="grid-33"><a class="course--module course--link" href="course-detail.html">
-              <h4 class="course--label">Course</h4>
-              <h3 class="course--title">{course.title}</h3>
-            </a>
-          </div>
+        <div class="grid-33"><a class="course--module course--link" href={'/courses/' + course.id}>
+            <h4 class="course--label">Course</h4>
+            <h3 class="course--title">{course.title}</h3>
+          </a>
+        </div>
       );
     } //If no images are in the array then a Not Found message is displayed to the DOM 
     else {
@@ -142,7 +143,7 @@ render() {
               <hr/>
               <div class="bounds">
                 {courses}
-                <div class="grid-33"><a class="course--module course--add--module" href="create-course.html">
+                <div class="grid-33"><a class="course--module course--add--module" href='/courses/create'>
                     <h3 class="course--add--title"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
                         viewBox="0 0 13 13" class="add">
                         <polygon points="7,6 7,0 6,0 6,6 0,6 0,7 6,7 6,13 7,13 7,7 13,7 13,6 "></polygon>
