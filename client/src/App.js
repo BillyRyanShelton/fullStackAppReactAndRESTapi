@@ -3,6 +3,70 @@ import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
 import axios from 'axios';
 
 
+class NotFound extends Component {
+
+render() {
+    return(
+      <div id="root">
+        <div>
+          <Header/>
+          <hr/>
+          <div class="bounds">
+            <h1>Not Found</h1>
+            <p>Sorry! We couldn't find the page you're looking for.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+// export default App
+
+
+
+
+class Forbidden extends Component {
+
+render() {
+    return(
+      <div id="root">
+        <div>
+          <Header/>
+          <hr/>
+          <div class="bounds">
+            <h1>Forbidden</h1>
+            <p>Oh oh! You can't access this page.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+// export default App
+
+
+
+class Error extends Component {
+
+render() {
+    return(
+      <div id="root">
+        <div>
+          <Header/>
+          <hr/>
+          <div class="bounds">
+            <h1>Error</h1>
+            <p>Sorry! We just encountered an unexpected error.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+// export default App
+
+
+
 
 class UserSignOut extends Component {
 
@@ -14,10 +78,6 @@ render() {
   }
 }
 // export default App
-
-
-
-
 
 
 
@@ -437,7 +497,7 @@ render() {
     return(
       <div className="header">
         <div className="bounds">
-          <h1 className="header--logo">Courses</h1>
+          <Link to='/'><h1 className="header--logo">Courses</h1></Link>
           <nav><a className="signup" href="/signup">Sign Up</a><a className="signin" href="/signin">Sign In</a></nav>
         </div>
       </div>
