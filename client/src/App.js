@@ -121,17 +121,19 @@ class CourseDetail extends Component {
   //course detail is retrived from the database
   componentDidMount() {
     const id = this.props.match.params.id;
-    console.log(id);
+    //console.log(id);
 
     axios.get(`http://localhost:5000/api/courses/${id}`).then((response) => {
       const courseData = response.data.course;
       console.log(courseData);
       this.setState({
+        courseData: courseData,
         name: courseData.User.firstName + ' ' + courseData.User.lastName,
         title:courseData.title,
         description:courseData.description,
         estimatedTime: courseData.estimatedTime,
-        materials: courseData.materialsNeeded
+        materials: courseData.materialsNeeded,
+        id: courseData.id
       });
     })
     .catch(error => {
@@ -150,7 +152,7 @@ render() {
               <div className="bounds">
                 <div className="grid-100">
                   <span>
-                    <Link to="update-course.html" className="button">Update Course</Link>
+                    <Link to={'/courses/' + this.state.id + '/update'} className="button">Update Course</Link>
                     <a className="button" href="#">Delete Course</a></span>
                     <Link to="/" className="button button-secondary">Return to List</Link>
                 </div>
@@ -161,7 +163,7 @@ render() {
                 <div className="course--header">
                   <h4 className="course--label">Course</h4>
                   <h3 className="course--title">{this.state.title}</h3>
-                  <p>{this.state.name}</p>
+                  <p>By: {this.state.name}</p>
                 </div>
                 <div className="course--description">
                   <p>{this.state.description}</p>
@@ -201,9 +203,90 @@ render() {
 
 class UpdateCourse extends Component {
 
+  constructor() {
+    super();
+    this.state = {
+      courseData: '',
+      name: '',
+      title: '',
+      description: '',
+      estimatedTime:'',
+      materials:'',
+      id: ''
+    }
+    this.handleChangeDescription = this.handleChangeDescription.bind(this);
+    this.handleChangeMaterials = this.handleChangeMaterials.bind(this);
+  }
+
+  //course detail is retrived from the database
+  componentDidMount() {
+    const id = this.props.match.params.id;
+    //console.log(id);
+
+    axios.get(`http://localhost:5000/api/courses/${id}`).then((response) => {
+      const courseData = response.data.course;
+      //console.log(courseData);
+      this.setState({
+        courseData: courseData,
+        name: courseData.User.firstName + ' ' + courseData.User.lastName,
+        title:courseData.title,
+        description:courseData.description,
+        estimatedTime: courseData.estimatedTime,
+        materials: courseData.materialsNeeded,
+        id: courseData.id
+      });
+    })
+    .catch(error => {
+      console.log('Error fetching and parsing data.', error);
+    }); 
+  }
+
+  handleChangeDescription(e){
+    this.setState({description: e.target.value});
+  }
+  handleChangeMaterials(e){
+    this.setState({materials: e.target.value});
+  }
+
 render() {
     return(
-      <div>
+      <div id="root">
+        <div>
+          <Header/>
+          <hr />
+          <div className="bounds course--detail">
+            <h1>Update Course</h1>
+            <div>
+              <form>
+                <div className="grid-66">
+                  <div className="course--header">
+                    <h4 className="course--label">Course</h4>
+                    <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." defaultValue={this.state.title} /></div>
+                    <p>By: {this.state.name}</p>
+                  </div>
+                  <div className="course--description">
+                    <div><textarea id="description" name="description" className="" placeholder="Course description..." value={this.state.description} onChange={this.handleChangeDescription}/></div>
+                  </div>
+                </div>
+                <div className="grid-25 grid-right">
+                  <div className="course--stats">
+                    <ul className="course--stats--list">
+                      <li className="course--stats--list--item">
+                        <h4>Estimated Time</h4>
+                        <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours" defaultValue={this.state.estimatedTime} /></div>
+                      </li>
+                      <li className="course--stats--list--item">
+                        <h4>Materials Needed</h4>
+                        <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." value={this.state.materials} onChange={this.handleChangeMaterials} /></div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="grid-100 pad-bottom"><button className="button" type="submit">Update Course</button><Link to={"/courses/" + this.props.match.params.id}><button className="button button-secondary">Cancel</button></Link></div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -222,8 +305,52 @@ class CreateCourse extends Component {
 
 render() {
     return(
-      <div> 
-      <h1>hello</h1>
+      <div id="root">
+        <div>
+          <Header/>
+          <hr />
+          <div className="bounds course--detail">
+            <h1>Create Course</h1>
+            <div>
+              <div>
+                <h2 className="validation--errors--label">Validation errors</h2>
+                <div className="validation-errors">
+                  <ul>
+                    <li>Please provide a value for "Title"</li>
+                    <li>Please provide a value for "Description"</li>
+                  </ul>
+                </div>
+              </div>
+              <form>
+                <div className="grid-66">
+                  <div className="course--header">
+                    <h4 className="course--label">Course</h4>
+                    <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." /></div>
+                    <p>By Joe Smith</p>
+                  </div>
+                  <div className="course--description">
+                    <div><textarea id="description" name="description" className="" placeholder="Course description..." defaultValue={""} /></div>
+                  </div>
+                </div>
+                <div className="grid-25 grid-right">
+                  <div className="course--stats">
+                    <ul className="course--stats--list">
+                      <li className="course--stats--list--item">
+                        <h4>Estimated Time</h4>
+                        <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours"/></div>
+                      </li>
+                      <li className="course--stats--list--item">
+                        <h4>Materials Needed</h4>
+                        <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." defaultValue={""} /></div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="grid-100 pad-bottom"><button className="button" type="submit">Create Course</button><Link to='/'><button className="button button-secondary">Cancel</button></Link></div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
