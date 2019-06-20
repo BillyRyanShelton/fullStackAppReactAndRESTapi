@@ -127,11 +127,38 @@ render() {
 
 class UserSignIn extends Component {
 
-  signin(){
-
+  signIn(email, password){
+    axios.get('http://localhost:5000/api/users', {
+      auth: {
+        username: email,
+        password: password,
+      }
+    })
+    .then((response)=>{
+      console.log(response);
+    })
+    .catch(error => {
+        console.log('Error fetching and parsing data.', error);
+    }); 
   }
 
-render() {
+  constructor(){
+    super();
+    this.state = {
+      emailAddress: '',
+      password: ''
+    };
+    this.handleInput = this.handleInput.bind(this);
+    this.signIn = this.signIn.bind(this);
+  }
+  handleInput(e){
+    e.preventDefault();
+    this.setState({[e.target.name]: e.target.value});
+    this.signIn(this.state.email, this.state.password);
+  }
+
+  render() {
+    this.signIn('joe@smith.com', 'joepassword');
     return(
       <div id="root">
           <div>
@@ -142,8 +169,8 @@ render() {
                 <h1>Sign In</h1>
                 <div>
                   <form>
-                    <div><input id="emailAddress" name="emailAddress" type="text" className="" placeholder="Email Address" /></div>
-                    <div><input id="password" name="password" type="password" className="" placeholder="Password" /></div>
+                    <div><input id="emailAddress" name="emailAddress" type="text" className="" placeholder="Email Address" onSubmit={this.handleInput} /></div>
+                    <div><input id="password" name="password" type="password" className="" placeholder="Password" onSubmit={this.handleInput}/></div>
                     <div className="grid-100 pad-bottom"><button className="button" type="submit">Sign In</button>
                     <Link to='/'><button className="button button-secondary">Cancel</button></Link></div>
                   </form>
@@ -520,13 +547,17 @@ render() {
 
 class App extends Component {
 
-    constructor() {
+  constructor() {
     super();
     this.state = {
       userLoggedIn: '',
       username:'',
       password:''
     }
+  }
+
+  userLoggedIn(){
+
   }
 
 
