@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, NavLink, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -69,7 +69,7 @@ class CourseDetail extends Component {
   constructor() {
     super();
     this.state = {
-      courseData: null
+      courseData: ''
     }
   }
 
@@ -89,6 +89,7 @@ class CourseDetail extends Component {
   }
 
 render() {
+  let courseData = this.state.courseData;
     return(
       <div id="root">
         <div>
@@ -97,16 +98,20 @@ render() {
           <div>
             <div className="actions--bar">
               <div className="bounds">
-                <div className="grid-100"><span><a className="button" href="update-course.html">Update Course</a><a className="button" href="#">Delete Course</a></span><a
-                    className="button button-secondary" href="index.html">Return to List</a></div>
+                <div className="grid-100">
+                  <span>
+                    <Link to="update-course.html" className="button">Update Course</Link>
+                    <a className="button" href="#">Delete Course</a></span>
+                    <Link to="index.html" className="button button-secondary">Return to List</Link>
+                </div>
               </div>
             </div>
             <div className="bounds course--detail">
               <div className="grid-66">
                 <div className="course--header">
                   <h4 className="course--label">Course</h4>
-                  <h3 className="course--title">Build a Basic Bookcase</h3>
-                  <p>By Joe Smith</p>
+                  <h3 className="course--title">{courseData.title}</h3>
+                  <p>User Id {courseData.userId}</p>
                 </div>
                 <div className="course--description">
                   <p>High-end furniture projects are great to dream about. But unless you have a well-equipped shop and some serious woodworking experience to draw on, it can be difficult to turn the dream into a reality.</p>
@@ -229,10 +234,11 @@ render() {
     let courses;
     if(data.length > 0) {
       courses = data.map( (course) => 
-        <div className="grid-33"><a className="course--module course--link" href={'/courses/' + course.id}>
+        <div className="grid-33" key={course.id}>
+          <Link to={'/courses/' + course.id} className="course--module course--link">
             <h4 className="course--label">Course</h4>
             <h3 className="course--title">{course.title}</h3>
-          </a>
+          </Link>
         </div>
       );
     } //If no images are in the array then a Not Found message is displayed to the DOM 
@@ -247,12 +253,14 @@ render() {
           <hr/>
           <div className="bounds">
             {courses}
-            <div className="grid-33"><a className="course--module course--add--module" href='/courses/create'>
+            <div className="grid-33">
+              <Link to='/courses/create' className="course--module course--add--module">
                 <h3 className="course--add--title"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
                     viewBox="0 0 13 13" className="add">
                     <polygon points="7,6 7,0 6,0 6,6 0,6 0,7 6,7 6,13 7,13 7,7 13,7 13,6 "></polygon>
                   </svg>New Course</h3>
-              </a></div>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
