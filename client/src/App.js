@@ -127,6 +127,10 @@ render() {
 
 class UserSignIn extends Component {
 
+  signin(){
+
+  }
+
 render() {
     return(
       <div id="root">
@@ -201,56 +205,56 @@ class CourseDetail extends Component {
     }); 
   }
 
-render() {
-    return(
-      <div id="root">
-        <div>
-          <Header/>
-          <hr/>
+  render() {
+      return(
+        <div id="root">
           <div>
-            <div className="actions--bar">
-              <div className="bounds">
-                <div className="grid-100">
-                  <span>
-                    <Link to={'/courses/' + this.state.id + '/update'} className="button">Update Course</Link>
-                    <a className="button" href="#">Delete Course</a></span>
-                    <Link to="/" className="button button-secondary">Return to List</Link>
+            <Header/>
+            <hr/>
+            <div>
+              <div className="actions--bar">
+                <div className="bounds">
+                  <div className="grid-100">
+                    <span>
+                      <Link to={'/courses/' + this.state.id + '/update'} className="button">Update Course</Link>
+                      <a className="button" href="#">Delete Course</a></span>
+                      <Link to="/" className="button button-secondary">Return to List</Link>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="bounds course--detail">
-              <div className="grid-66">
-                <div className="course--header">
-                  <h4 className="course--label">Course</h4>
-                  <h3 className="course--title">{this.state.title}</h3>
-                  <p>By: {this.state.name}</p>
+              <div className="bounds course--detail">
+                <div className="grid-66">
+                  <div className="course--header">
+                    <h4 className="course--label">Course</h4>
+                    <h3 className="course--title">{this.state.title}</h3>
+                    <p>By: {this.state.name}</p>
+                  </div>
+                  <div className="course--description">
+                    <p>{this.state.description}</p>
+                  </div>
                 </div>
-                <div className="course--description">
-                  <p>{this.state.description}</p>
-                </div>
-              </div>
-              <div className="grid-25 grid-right">
-                <div className="course--stats">
-                  <ul className="course--stats--list">
-                    <li className="course--stats--list--item">
-                      <h4>Estimated Time</h4>
-                      <h3>{this.state.estimatedTime}</h3>
-                    </li>
-                    <li className="course--stats--list--item">
-                      <h4>Materials Needed</h4>
-                      <ul>
-                        <li>{this.state.materials}</li>
-                      </ul>
-                    </li>
-                  </ul>
+                <div className="grid-25 grid-right">
+                  <div className="course--stats">
+                    <ul className="course--stats--list">
+                      <li className="course--stats--list--item">
+                        <h4>Estimated Time</h4>
+                        <h3>{this.state.estimatedTime}</h3>
+                      </li>
+                      <li className="course--stats--list--item">
+                        <h4>Materials Needed</h4>
+                        <ul>
+                          <li>{this.state.materials}</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 }
 // // export default App
 
@@ -308,48 +312,48 @@ class UpdateCourse extends Component {
     this.setState({materials: e.target.value});
   }
 
-render() {
-    return(
-      <div id="root">
-        <div>
-          <Header/>
-          <hr />
-          <div className="bounds course--detail">
-            <h1>Update Course</h1>
-            <div>
-              <form>
-                <div className="grid-66">
-                  <div className="course--header">
-                    <h4 className="course--label">Course</h4>
-                    <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." defaultValue={this.state.title} /></div>
-                    <p>By: {this.state.name}</p>
+  render() {
+      return(
+        <div id="root">
+          <div>
+            <Header/>
+            <hr />
+            <div className="bounds course--detail">
+              <h1>Update Course</h1>
+              <div>
+                <form>
+                  <div className="grid-66">
+                    <div className="course--header">
+                      <h4 className="course--label">Course</h4>
+                      <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." defaultValue={this.state.title} /></div>
+                      <p>By: {this.state.name}</p>
+                    </div>
+                    <div className="course--description">
+                      <div><textarea id="description" name="description" className="" placeholder="Course description..." value={this.state.description} onChange={this.handleChangeDescription}/></div>
+                    </div>
                   </div>
-                  <div className="course--description">
-                    <div><textarea id="description" name="description" className="" placeholder="Course description..." value={this.state.description} onChange={this.handleChangeDescription}/></div>
+                  <div className="grid-25 grid-right">
+                    <div className="course--stats">
+                      <ul className="course--stats--list">
+                        <li className="course--stats--list--item">
+                          <h4>Estimated Time</h4>
+                          <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours" defaultValue={this.state.estimatedTime} /></div>
+                        </li>
+                        <li className="course--stats--list--item">
+                          <h4>Materials Needed</h4>
+                          <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." value={this.state.materials} onChange={this.handleChangeMaterials} /></div>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
-                </div>
-                <div className="grid-25 grid-right">
-                  <div className="course--stats">
-                    <ul className="course--stats--list">
-                      <li className="course--stats--list--item">
-                        <h4>Estimated Time</h4>
-                        <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours" defaultValue={this.state.estimatedTime} /></div>
-                      </li>
-                      <li className="course--stats--list--item">
-                        <h4>Materials Needed</h4>
-                        <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." value={this.state.materials} onChange={this.handleChangeMaterials} /></div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="grid-100 pad-bottom"><button className="button" type="submit">Update Course</button><Link to={"/courses/" + this.props.match.params.id}><button className="button button-secondary">Cancel</button></Link></div>
-              </form>
+                  <div className="grid-100 pad-bottom"><button className="button" type="submit">Update Course</button><Link to={"/courses/" + this.props.match.params.id}><button className="button button-secondary">Cancel</button></Link></div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 }
 // export default App
 
@@ -363,57 +367,57 @@ render() {
 
 class CreateCourse extends Component {
 
-render() {
-    return(
-      <div id="root">
-        <div>
-          <Header/>
-          <hr />
-          <div className="bounds course--detail">
-            <h1>Create Course</h1>
-            <div>
+  render() {
+      return(
+        <div id="root">
+          <div>
+            <Header/>
+            <hr />
+            <div className="bounds course--detail">
+              <h1>Create Course</h1>
               <div>
-                <h2 className="validation--errors--label">Validation errors</h2>
-                <div className="validation-errors">
-                  <ul>
-                    <li>Please provide a value for "Title"</li>
-                    <li>Please provide a value for "Description"</li>
-                  </ul>
-                </div>
-              </div>
-              <form>
-                <div className="grid-66">
-                  <div className="course--header">
-                    <h4 className="course--label">Course</h4>
-                    <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." /></div>
-                    <p>By Joe Smith</p>
-                  </div>
-                  <div className="course--description">
-                    <div><textarea id="description" name="description" className="" placeholder="Course description..." defaultValue={""} /></div>
-                  </div>
-                </div>
-                <div className="grid-25 grid-right">
-                  <div className="course--stats">
-                    <ul className="course--stats--list">
-                      <li className="course--stats--list--item">
-                        <h4>Estimated Time</h4>
-                        <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours"/></div>
-                      </li>
-                      <li className="course--stats--list--item">
-                        <h4>Materials Needed</h4>
-                        <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." defaultValue={""} /></div>
-                      </li>
+                <div>
+                  <h2 className="validation--errors--label">Validation errors</h2>
+                  <div className="validation-errors">
+                    <ul>
+                      <li>Please provide a value for "Title"</li>
+                      <li>Please provide a value for "Description"</li>
                     </ul>
                   </div>
                 </div>
-                <div className="grid-100 pad-bottom"><button className="button" type="submit">Create Course</button><Link to='/'><button className="button button-secondary">Cancel</button></Link></div>
-              </form>
+                <form>
+                  <div className="grid-66">
+                    <div className="course--header">
+                      <h4 className="course--label">Course</h4>
+                      <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." /></div>
+                      <p>By Joe Smith</p>
+                    </div>
+                    <div className="course--description">
+                      <div><textarea id="description" name="description" className="" placeholder="Course description..." defaultValue={""} /></div>
+                    </div>
+                  </div>
+                  <div className="grid-25 grid-right">
+                    <div className="course--stats">
+                      <ul className="course--stats--list">
+                        <li className="course--stats--list--item">
+                          <h4>Estimated Time</h4>
+                          <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours"/></div>
+                        </li>
+                        <li className="course--stats--list--item">
+                          <h4>Materials Needed</h4>
+                          <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." defaultValue={""} /></div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="grid-100 pad-bottom"><button className="button" type="submit">Create Course</button><Link to='/'><button className="button button-secondary">Cancel</button></Link></div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 }
 // export default App
 
@@ -441,45 +445,45 @@ class Courses extends Component {
   }
 
 
-render() {
+  render() {
 
-      //If courses are returned they are stored
-    let data = this.state.data;
-    let courses;
-    if(data.length > 0) {
-      courses = data.map( (course) => 
-        <div className="grid-33" key={course.id}>
-          <Link to={'/courses/' + course.id} className="course--module course--link">
-            <h4 className="course--label">Course</h4>
-            <h3 className="course--title">{course.title}</h3>
-          </Link>
-        </div>
-      );
-    } //If no images are in the array then a Not Found message is displayed to the DOM 
-    else {
-      courses = <h1 className="not-found"> Not Found </h1>
-    }
+        //If courses are returned they are stored
+      let data = this.state.data;
+      let courses;
+      if(data.length > 0) {
+        courses = data.map( (course) => 
+          <div className="grid-33" key={course.id}>
+            <Link to={'/courses/' + course.id} className="course--module course--link">
+              <h4 className="course--label">Course</h4>
+              <h3 className="course--title">{course.title}</h3>
+            </Link>
+          </div>
+        );
+      } //If no images are in the array then a Not Found message is displayed to the DOM 
+      else {
+        courses = <h1 className="not-found"> Not Found </h1>
+      }
 
-    return(
-      <div id="root">
-        <div>
-          <Header/>
-          <hr/>
-          <div className="bounds">
-            {courses}
-            <div className="grid-33">
-              <Link to='/courses/create' className="course--module course--add--module">
-                <h3 className="course--add--title"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-                    viewBox="0 0 13 13" className="add">
-                    <polygon points="7,6 7,0 6,0 6,6 0,6 0,7 6,7 6,13 7,13 7,7 13,7 13,6 "></polygon>
-                  </svg>New Course</h3>
-              </Link>
+      return(
+        <div id="root">
+          <div>
+            <Header/>
+            <hr/>
+            <div className="bounds">
+              {courses}
+              <div className="grid-33">
+                <Link to='/courses/create' className="course--module course--add--module">
+                  <h3 className="course--add--title"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                      viewBox="0 0 13 13" className="add">
+                      <polygon points="7,6 7,0 6,0 6,6 0,6 0,7 6,7 6,13 7,13 7,7 13,7 13,6 "></polygon>
+                    </svg>New Course</h3>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 }
 // export default App
 
@@ -515,14 +519,25 @@ render() {
 
 
 class App extends Component {
+
+    constructor() {
+    super();
+    this.state = {
+      userLoggedIn: '',
+      username:'',
+      password:''
+    }
+  }
+
+
   render() {
     return(
       <BrowserRouter>
         <Switch>
-          <Route exact path='/' component={Courses}/>
-          <Route exact path='/courses/create' component={CreateCourse}/>
-          <Route exact path='/courses/:id/update' component={UpdateCourse}/>
-          <Route exact path='/courses/:id' component = {CourseDetail}/>
+          <Route exact path='/' component={Courses} userInfo={this.state}/>
+          <Route exact path='/courses/create' component={CreateCourse} userInfo={this.state}/>
+          <Route exact path='/courses/:id/update' component={UpdateCourse} userInfo={this.state}/>
+          <Route exact path='/courses/:id' component = {CourseDetail} userInfo={this.state}/>
           <Route exact path='/signin' component={UserSignIn}/>
           <Route exact path='/signup' component={UserSignUp}/>
           <Route exact path='/signout' component={UserSignOut}/>
