@@ -1,0 +1,37 @@
+{
+  "users": [
+    {
+      "firstName": "Joe",
+      "lastName": "Smith",
+      "emailAddress": "joe@smith.com",
+      "password": "joepassword"
+    },
+    {
+      "firstName": "Sally",
+      "lastName": "Jones",
+      "emailAddress": "sally@jones.com",
+      "password": "sallypassword"
+    }
+  ],
+  "courses": [
+    {
+      "userId": 1,
+      "title": "Algebra I",
+      "description": " This course focuses on solving linear equations and inequalities, systems of equations and inequalities, quadratic equations, fundamental operations with monomials, polynomial and radicals, factoring, graphing different types of functions, and practical word problems.",
+      "estimatedTime": "2 Semesters",
+      "materialsNeeded": "Ruler, Graphing Calculator, Pencil, Paper, Whiteboard, Expo Markers, Computer/Phone"
+    },
+    {
+      "userId": 2,
+      "title": "Geometry",
+      "description": "This course focuses on the study of plane and solid figures, deductive and inductive reasoning, and the axiomatic method of proof.  Numeric and algebraic applications are included in geometic concepts.",
+      "estimatedTime": "2",
+      "materialsNeeded": "Protractor, Ruler, Graphing Calculator, Pencil, Paper, Whiteboard, Expo Markers, Computer/Phone"
+    },
+    {
+      "userId": 2,
+      "title": "Algebra II",
+      "description": "This course focuses on the study of polynomials, exponentials, logarithmics, radicals and rational functions.  As an extenstion from the real number system it includes the complex number system."
+    }
+  ]
+}
