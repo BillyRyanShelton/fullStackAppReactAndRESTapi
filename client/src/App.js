@@ -123,11 +123,22 @@ render() {
 
 
 
-
-
 class UserSignIn extends Component {
 
-  signIn(email, password){
+  constructor(props){
+    super(props);
+    this.state = {
+      emailAddress: '',
+      password: ''
+    };
+    this.handleInput = this.handleInput.bind(this);
+    this.signIn = this.signIn.bind(this);
+    //this.callSignIn = this.callSignIn(this);
+  }
+
+
+  signIn(e,email, password){
+    e.preventDefault();
     axios.get('http://localhost:5000/api/users', {
       auth: {
         username: email,
@@ -135,30 +146,22 @@ class UserSignIn extends Component {
       }
     })
     .then((response)=>{
-      console.log(response);
+      console.log(response.data);
+      console.log('here!');
+      this.props.userLoggedIn(response.data.username, response.data.password);
     })
     .catch(error => {
         console.log('Error fetching and parsing data.', error);
     }); 
   }
 
-  constructor(){
-    super();
-    this.state = {
-      emailAddress: '',
-      password: ''
-    };
-    this.handleInput = this.handleInput.bind(this);
-    this.signIn = this.signIn.bind(this);
-  }
   handleInput(e){
     e.preventDefault();
     this.setState({[e.target.name]: e.target.value});
-    this.signIn(this.state.email, this.state.password);
   }
 
   render() {
-    this.signIn('joe@smith.com', 'joepassword');
+
     return(
       <div id="root">
           <div>
@@ -168,11 +171,10 @@ class UserSignIn extends Component {
               <div className="grid-33 centered signin">
                 <h1>Sign In</h1>
                 <div>
-                  <form>
-                    <div><input id="emailAddress" name="emailAddress" type="text" className="" placeholder="Email Address" onSubmit={this.handleInput} /></div>
-                    <div><input id="password" name="password" type="password" className="" placeholder="Password" onSubmit={this.handleInput}/></div>
-                    <div className="grid-100 pad-bottom"><button className="button" type="submit">Sign In</button>
-                    <Link to='/'><button className="button button-secondary">Cancel</button></Link></div>
+                  <form onSubmit={(e)=>{this.signIn(e,this.state.emailAddress, this.state.password)}}>
+                    <div><input id="emailAddress" name="emailAddress" type="text" className='' placeholder="Email Address" defaultValue=''  onChange={(e) => this.handleInput(e)}/></div>
+                    <div><input id="password" name="password" type="password" className='' placeholder="Password" defaultValue=''  onChange={(e) => this.handleInput(e)}/></div>
+                    <div className="grid-100 pad-bottom"><button className="button" type="submit" >Sign In</button><Link to='/'><button className="button button-secondary">Cancel</button></Link></div>
                   </form>
                 </div>
                 <p>&nbsp;</p>
@@ -547,20 +549,25 @@ render() {
 
 class App extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       userLoggedIn: '',
       username:'',
       password:''
-    }
+    };
+    this.userLoggedIn = this.userLoggedIn.bind(this);
   }
 
-  userLoggedIn(){
-
+  userLoggedIn(username, password){
+      this.setState({
+        userLoggedIn: 'true',
+        username: username,
+        password: password
+      });
   }
 
-
+ //onSearch={this.performSearch}
   render() {
     return(
       <BrowserRouter>
@@ -569,7 +576,7 @@ class App extends Component {
           <Route exact path='/courses/create' component={CreateCourse} userInfo={this.state}/>
           <Route exact path='/courses/:id/update' component={UpdateCourse} userInfo={this.state}/>
           <Route exact path='/courses/:id' component = {CourseDetail} userInfo={this.state}/>
-          <Route exact path='/signin' component={UserSignIn}/>
+          <Route exact path='/signin' render={()=> <UserSignIn userLoggedIn={this.userLoggedIn}/> }/>
           <Route exact path='/signup' component={UserSignUp}/>
           <Route exact path='/signout' component={UserSignOut}/>
         </Switch>
