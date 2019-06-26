@@ -9,7 +9,7 @@ render() {
     return(
       <div id="root">
         <div>
-          <Header/>
+          <Header userInfo = {this.props}/>
           <hr/>
           <div class="bounds">
             <h1>Not Found</h1>
@@ -31,7 +31,7 @@ render() {
     return(
       <div id="root">
         <div>
-          <Header/>
+          <Header userInfo = {this.props}/>
           <hr/>
           <div class="bounds">
             <h1>Forbidden</h1>
@@ -52,7 +52,7 @@ render() {
     return(
       <div id="root">
         <div>
-          <Header/>
+          <Header userInfo = {this.props}/>
           <hr/>
           <div class="bounds">
             <h1>Error</h1>
@@ -87,7 +87,7 @@ render() {
     return(
       <div id="root">
         <div>
-          <Header/>
+          <Header userInfo = {this.props}/>
           <hr/>
           <div className="bounds">
             <div className="grid-33 centered signin">
@@ -146,9 +146,7 @@ class UserSignIn extends Component {
       }
     })
     .then((response)=>{
-      console.log(response.data);
-      console.log('here!');
-      this.props.userLoggedIn(response.data.username, response.data.password);
+      this.props.userLoggedIn(response.data.username, response.data.password, response.data.firstName, response.data.lastName);
     })
     .catch(error => {
         console.log('Error fetching and parsing data.', error);
@@ -165,7 +163,7 @@ class UserSignIn extends Component {
     return(
       <div id="root">
           <div>
-            <Header/>
+            <Header userInfo = {this.props}/>
             <hr/>
             <div className="bounds">
               <div className="grid-33 centered signin">
@@ -214,7 +212,7 @@ class CourseDetail extends Component {
   //course detail is retrived from the database
   componentDidMount() {
     const id = this.props.match.params.id;
-    //console.log(id);
+    console.log(id);
 
     axios.get(`http://localhost:5000/api/courses/${id}`).then((response) => {
       const courseData = response.data.course;
@@ -238,7 +236,7 @@ class CourseDetail extends Component {
       return(
         <div id="root">
           <div>
-            <Header/>
+            <Header userInfo = {this.props}/>
             <hr/>
             <div>
               <div className="actions--bar">
@@ -345,7 +343,7 @@ class UpdateCourse extends Component {
       return(
         <div id="root">
           <div>
-            <Header/>
+            <Header userInfo = {this.props}/>
             <hr />
             <div className="bounds course--detail">
               <h1>Update Course</h1>
@@ -400,7 +398,7 @@ class CreateCourse extends Component {
       return(
         <div id="root">
           <div>
-            <Header/>
+            <Header userInfo = {this.props}/>
             <hr />
             <div className="bounds course--detail">
               <h1>Create Course</h1>
@@ -496,7 +494,7 @@ class Courses extends Component {
       return(
         <div id="root">
           <div>
-            <Header/>
+            <Header userInfo = {this.props}/>
             <hr/>
             <div className="bounds">
               {courses}
@@ -526,12 +524,26 @@ class Courses extends Component {
 //need to add when a user is signed in for the header component
 class Header extends Component {
 
+      // <div class="header">
+      //   <div class="bounds">
+      //     <h1 class="header--logo">Courses</h1>
+      //     <nav><span>Welcome Joe Smith!</span><a class="signout" href="index.html">Sign Out</a></nav>
+      //   </div>
+      // </div>
+
 render() {
+  //console.log(this.props.userInfo.userInfo);
+  let ifLoggedIn;
+  if(this.props.userInfo.userInfo.userLoggedIn != ''){
+    ifLoggedIn =  <nav><span>Welcome {this.props.userInfo.userInfo.first} {this.props.userInfo.userInfo.last}!</span><Link to="/signout">Sign Out</Link></nav>;
+  } else{
+    ifLoggedIn = <nav><a className="signup" href="/signup">Sign Up</a><a className="signin" href="/signin">Sign In</a></nav>
+  }
     return(
       <div className="header">
         <div className="bounds">
           <Link to='/'><h1 className="header--logo">Courses</h1></Link>
-          <nav><a className="signup" href="/signup">Sign Up</a><a className="signin" href="/signin">Sign In</a></nav>
+          {ifLoggedIn}
         </div>
       </div>
     );
@@ -554,16 +566,20 @@ class App extends Component {
     this.state = {
       userLoggedIn: '',
       username:'',
-      password:''
+      password:'',
+      first: '',
+      last: ''
     };
     this.userLoggedIn = this.userLoggedIn.bind(this);
   }
 
-  userLoggedIn(username, password){
+  userLoggedIn(username, password, first, last){
       this.setState({
         userLoggedIn: 'true',
         username: username,
-        password: password
+        password: password,
+        first: first,
+        last: last
       });
   }
 
@@ -572,12 +588,13 @@ class App extends Component {
     return(
       <BrowserRouter>
         <Switch>
-          <Route exact path='/' component={Courses} userInfo={this.state}/>
-          <Route exact path='/courses/create' component={CreateCourse} userInfo={this.state}/>
-          <Route exact path='/courses/:id/update' component={UpdateCourse} userInfo={this.state}/>
-          <Route exact path='/courses/:id' component = {CourseDetail} userInfo={this.state}/>
-          <Route exact path='/signin' render={()=> <UserSignIn userLoggedIn={this.userLoggedIn}/> }/>
-          <Route exact path='/signup' component={UserSignUp}/>
+          <Route exact path='/' render={()=> <Courses userInfo={this.state}/> }/>
+          <Route exact path='/courses/create' render={()=> <CreateCourse userInfo={this.state}/> }/>
+          <Route exact path='/courses/:id/update' render={()=> <UpdateCourse userInfo={this.state}/> }/>
+          <Route exact path='/courses/:id' render={(props)=> <CourseDetail userInfo={this.state} {...props}/> }/>
+          <Route exact path='/signin' render={()=> <UserSignIn userLoggedIn={this.userLoggedIn} userInfo={this.state}/> }/>
+          <Route exact path='/signup' render={()=><UserSignUp userInfo={this.state}/> }/>
+          <route exact path='/signout' render={()=><UserSignOut userInfo={this.state}/> }/>
           <Route exact path='/signout' component={UserSignOut}/>
         </Switch>
       </BrowserRouter>
