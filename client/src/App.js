@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
 import axios from 'axios';
+import {Redirect } from 'react-router'
 
 
 class NotFound extends Component {
@@ -104,7 +105,7 @@ render() {
                 </form>
               </div>
               <p>&nbsp;</p>
-              <p>Already have a user account? <a href="/signin">Click here</a> to sign in!</p>
+              <p>Already have a user account? <Link to="/signin">Click here</Link> to sign in!</p>
             </div>
           </div>
         </div>
@@ -129,13 +130,22 @@ class UserSignIn extends Component {
     super(props);
     this.state = {
       emailAddress: '',
-      password: ''
+      password: '',
+      isAuth:''
     };
     this.handleInput = this.handleInput.bind(this);
     this.signIn = this.signIn.bind(this);
-    //this.callSignIn = this.callSignIn(this);
+    this.submitRedirect = this.submitRedirect.bind(this);
+    
   }
 
+  submitRedirect(){
+    if(this.state.isAuth === 'true'){
+      return <Redirect to='/'/>
+    } else if(this.state.isAuth === 'false') {
+      return <p>Invalid Username or Password</p>
+    }
+  }
 
   signIn(e,email, password){
     e.preventDefault();
@@ -147,8 +157,10 @@ class UserSignIn extends Component {
     })
     .then((response)=>{
       this.props.userLoggedIn(response.data.username, response.data.password, response.data.firstName, response.data.lastName);
+      this.setState({isAuth: 'true'});
     })
     .catch(error => {
+      this.setState({isAuth: 'false'})
         console.log('Error fetching and parsing data.', error);
     }); 
   }
@@ -156,7 +168,7 @@ class UserSignIn extends Component {
   handleInput(e){
     e.preventDefault();
     this.setState({[e.target.name]: e.target.value});
-  }
+  } 
 
   render() {
 
@@ -169,14 +181,15 @@ class UserSignIn extends Component {
               <div className="grid-33 centered signin">
                 <h1>Sign In</h1>
                 <div>
-                  <form onSubmit={(e)=>{this.signIn(e,this.state.emailAddress, this.state.password)}}>
+                {this.submitRedirect()}
+                  <form onSubmit={(e)=>{this.signIn(e,this.state.emailAddress, this.state.password) }}>
                     <div><input id="emailAddress" name="emailAddress" type="text" className='' placeholder="Email Address" defaultValue=''  onChange={(e) => this.handleInput(e)}/></div>
                     <div><input id="password" name="password" type="password" className='' placeholder="Password" defaultValue=''  onChange={(e) => this.handleInput(e)}/></div>
                     <div className="grid-100 pad-bottom"><button className="button" type="submit" >Sign In</button><Link to='/'><button className="button button-secondary">Cancel</button></Link></div>
                   </form>
                 </div>
                 <p>&nbsp;</p>
-                <p>Don't have a user account? <a href="/signup">Click here</a> to sign up!</p>
+                <p>Don't have a user account? <Link to="/signup">Click here</Link> to sign up!</p>
               </div>
             </div>
           </div>
