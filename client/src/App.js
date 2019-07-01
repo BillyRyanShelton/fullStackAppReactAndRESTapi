@@ -86,6 +86,15 @@ render() {
 
 
 class UserSignUp extends Component {
+  //make state to manage data
+
+  //as user types in data the state is changed automatically
+
+  //onclick the data is sent to the api
+    //user passwords must match otherwise return error
+    //return error is already a user in the system
+
+  //if successful they the user signed in auth state data is updated and the user is signed in and redirected to the home page
 
   render() {
       return(
