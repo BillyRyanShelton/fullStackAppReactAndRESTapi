@@ -70,11 +70,14 @@ render() {
 
 
 class UserSignOut extends Component {
+  constructor(props){
+    super(props);
+  }
 
 render() {
+    this.props.userLoggedOut();
     return(
-      <div>
-      </div>
+      <Redirect to='/'/>
     );
   }
 }
@@ -84,33 +87,33 @@ render() {
 
 class UserSignUp extends Component {
 
-render() {
-    return(
-      <div id="root">
-        <div>
-          <Header userInfo = {this.props}/>
-          <hr/>
-          <div className="bounds">
-            <div className="grid-33 centered signin">
-              <h1>Sign Up</h1>
-              <div>
-                <form>
-                  <div><input id="firstName" name="firstName" type="text" className="" placeholder="First Name" value=""/></div>
-                  <div><input id="lastName" name="lastName" type="text" className="" placeholder="Last Name" value=""/></div>
-                  <div><input id="emailAddress" name="emailAddress" type="text" className="" placeholder="Email Address" value=""/></div>
-                  <div><input id="password" name="password" type="password" className="" placeholder="Password" value=""/></div>
-                  <div><input id="confirmPassword" name="confirmPassword" type="password" className="" placeholder="Confirm Password"
-                      value=""/></div>
-                  <div class="grid-100 pad-bottom"><button className="button" type="submit">Sign Up</button><Link to='/'><button class="button button-secondary">Cancel</button></Link></div>
-                </form>
+  render() {
+      return(
+        <div id="root">
+          <div>
+            <Header userInfo = {this.props}/>
+            <hr/>
+            <div className="bounds">
+              <div className="grid-33 centered signin">
+                <h1>Sign Up</h1>
+                <div>
+                  <form>
+                    <div><input id="firstName" name="firstName" type="text" className="" placeholder="First Name" value=""/></div>
+                    <div><input id="lastName" name="lastName" type="text" className="" placeholder="Last Name" value=""/></div>
+                    <div><input id="emailAddress" name="emailAddress" type="text" className="" placeholder="Email Address" value=""/></div>
+                    <div><input id="password" name="password" type="password" className="" placeholder="Password" value=""/></div>
+                    <div><input id="confirmPassword" name="confirmPassword" type="password" className="" placeholder="Confirm Password"
+                        value=""/></div>
+                    <div class="grid-100 pad-bottom"><button className="button" type="submit">Sign Up</button><Link to='/'><button class="button button-secondary">Cancel</button></Link></div>
+                  </form>
+                </div>
+                <p>&nbsp;</p>
+                <p>Already have a user account? <Link to="/signin">Click here</Link> to sign in!</p>
               </div>
-              <p>&nbsp;</p>
-              <p>Already have a user account? <Link to="/signin">Click here</Link> to sign in!</p>
             </div>
           </div>
         </div>
-      </div>
-    );
+      );
   }
 }
 // export default App
@@ -537,13 +540,6 @@ class Courses extends Component {
 //need to add when a user is signed in for the header component
 class Header extends Component {
 
-      // <div class="header">
-      //   <div class="bounds">
-      //     <h1 class="header--logo">Courses</h1>
-      //     <nav><span>Welcome Joe Smith!</span><a class="signout" href="index.html">Sign Out</a></nav>
-      //   </div>
-      // </div>
-
 render() {
   //console.log(this.props.userInfo.userInfo);
   let ifLoggedIn;
@@ -584,6 +580,7 @@ class App extends Component {
       last: ''
     };
     this.userLoggedIn = this.userLoggedIn.bind(this);
+    this.userLoggedOut = this.userLoggedOut.bind(this);
   }
 
   userLoggedIn(username, password, first, last){
@@ -593,6 +590,16 @@ class App extends Component {
         password: password,
         first: first,
         last: last
+      });
+  }
+
+    userLoggedOut(){
+      this.setState({
+        userLoggedIn: '',
+        username: '',
+        password: '',
+        first: '',
+        last: ''
       });
   }
 
@@ -607,8 +614,7 @@ class App extends Component {
           <Route exact path='/courses/:id' render={(props)=> <CourseDetail userInfo={this.state} {...props}/> }/>
           <Route exact path='/signin' render={()=> <UserSignIn userLoggedIn={this.userLoggedIn} userInfo={this.state}/> }/>
           <Route exact path='/signup' render={()=><UserSignUp userInfo={this.state}/> }/>
-          <route exact path='/signout' render={()=><UserSignOut userInfo={this.state}/> }/>
-          <Route exact path='/signout' component={UserSignOut}/>
+          <Route exact path='/signout' render={()=><UserSignOut userLoggedOut={this.userLoggedOut} /> }/>
         </Switch>
       </BrowserRouter>
     );
