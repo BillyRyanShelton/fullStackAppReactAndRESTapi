@@ -127,11 +127,13 @@ class UserSignUp extends Component {
       confirmPassword: confirmPassword
     })
     .then((response)=>{
+      console.log(response);
       //If the API returns a 201 the user has been created
       this.props.userLoggedIn(this.state.firstName, this.state.lastName, this.state.emailAddress, this.state.password);
       this.setState({userCreated: true});
     })
-    .catch(error => {
+    .catch((error) => {
+      console.log(error.response.data.message);
       //If the API returns an error the userCreated state is changed to false and an error is displayed
       this.setState({
         userCreated: false,
@@ -150,19 +152,20 @@ class UserSignUp extends Component {
   //if successful then the user signed in auth state data is updated and the user is signed in and redirected to the home page
   submitRedirectSignUp(){
     if(this.state.userCreated === true){
-      //sign in user 
-
       //redirect to home page
       return <Redirect to='/'/>
-
-    } else if(this.state.userCreated === false){
-        return(
-          <div className='validation-errors'>
-            <ul>
-              <li>{this.state.message}</li>
-            </ul>
-          </div>
-        );
+    } //if user creation failed, the error is displayed
+    else if(this.state.userCreated === false){
+      let errors = this.state.message.split(',');
+      let parsedErrors = errors.map((error)=> <li>{error}</li> );
+      console.log(errors);
+      return(
+        <div className='validation-errors'>
+          <ul>
+            <li>{parsedErrors}</li>
+          </ul>
+        </div>
+      );
     }
   }
 
@@ -698,7 +701,7 @@ class App extends Component {
           <Route exact path='/courses/:id/update' render={()=> <UpdateCourse userInfo={this.state}/> }/>
           <Route exact path='/courses/:id' render={(props)=> <CourseDetail userInfo={this.state} {...props}/> }/>
           <Route exact path='/signin' render={()=> <UserSignIn userLoggedIn={this.userLoggedIn} userInfo={this.state}/> }/>
-          <Route exact path='/signup' render={()=><UserSignUp userInfo={this.state}/> }/>
+          <Route exact path='/signup' render={()=><UserSignUp userInfo={this.state} userLoggedIn={this.userLoggedIn}/> }/>
           <Route exact path='/signout' render={()=><UserSignOut userLoggedOut={this.userLoggedOut} /> }/>
         </Switch>
       </BrowserRouter>
