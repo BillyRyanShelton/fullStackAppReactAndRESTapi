@@ -111,7 +111,10 @@ class UserSignUp extends Component {
 
     //The passwords are checked to see if they match before making a call to the API
     if(password !== confirmPassword){
-      this.setState({message: 'notEqual'});
+      this.setState({
+        userCreated: false,
+        message: 'The passwords do not match.'
+      });
       return;
     }
 
@@ -131,10 +134,10 @@ class UserSignUp extends Component {
     .catch(error => {
       //If the API returns an error the userCreated state is changed to false and an error is displayed
 
-      console.log(typeof error.response.data);
+      console.log(error.response.data.message);
       this.setState({
         userCreated: false,
-        message: error.response.data
+        message: error.response.data.message
       });
       console.log('Error fetching and parsing data.', error);
     }); 
@@ -154,31 +157,31 @@ class UserSignUp extends Component {
       //redirect to home page
       return <Redirect to='/'/>
 
-    } else if(this.state.userCreated === false && this.state.message === ''){
+    } else if(this.state.userCreated === false){
         return(
           <div className='validation-errors'>
             <ul>
-              <li>There was an error with your information. Please check over it.</li>
+              <li>{this.state.message}</li>
             </ul>
           </div>
         );
-    } else if(this.state.userCreated === false && this.state.message === 'User already exists in the system.') {
-      return( 
-        <div className='validation-errors'>
-          <ul>
-            <li>User already exists in the system.</li>
-          </ul>
-        </div>
-      );
-    } else if(this.state.message === 'notEqual') {
-      return( 
-        <div className='validation-errors'>
-          <ul>
-            <li>Passwords do not match</li>
-          </ul>
-        </div>
-      );
-    } 
+    }// } else if(this.state.userCreated === false && this.state.message === 'User already exists in the system.') {
+    //   return( 
+    //     <div className='validation-errors'>
+    //       <ul>
+    //         <li>User already exists in the system.</li>
+    //       </ul>
+    //     </div>
+    //   );
+    // } else if(this.state.message === 'notEqual') {
+    //   return( 
+    //     <div className='validation-errors'>
+    //       <ul>
+    //         <li>Passwords do not match</li>
+    //       </ul>
+    //     </div>
+    //   );
+    // } 
 
      //else if(this.state.userCreated === false) {
     
