@@ -88,13 +88,118 @@ render() {
 class UserSignUp extends Component {
   //make state to manage data
 
-  //as user types in data the state is changed automatically
+  constructor(props){
+    super(props);
+    this.state = {
+      firstName: '',
+      lastName: '',
+      emailAddress:'',
+      password:'',
+      confirmPassword:'',
+      userCreated:'',
+      message:''
+    };
+    this.handleInput = this.handleInput.bind(this);
+    this.signUp = this.signUp.bind(this);
+    this.submitRedirectSignUp = this.submitRedirectSignUp.bind(this);
+    
+  }
 
-  //onclick the data is sent to the api
-    //user passwords must match otherwise return error
-    //return error is already a user in the system
+
+  signUp(e,first, last, email, password, confirmPassword){
+    e.preventDefault();
+
+    //The passwords are checked to see if they match before making a call to the API
+    if(password !== confirmPassword){
+      this.setState({message: 'notEqual'});
+      return;
+    }
+
+    //A request is made to the API with the user sign up info
+    axios.post('http://localhost:5000/api/users', {
+      firstName: first,
+      lastName: last,
+      emailAddress: email,
+      password: password,
+      confirmPassword: confirmPassword
+    })
+    .then((response)=>{
+      //If the API returns a 201 the user has been created
+      this.props.userLoggedIn(this.state.firstName, this.state.lastName, this.state.emailAddress, this.state.password);
+      this.setState({userCreated: true});
+    })
+    .catch(error => {
+      //If the API returns an error the userCreated state is changed to false and an error is displayed
+
+      console.log(typeof error.response.data);
+      this.setState({
+        userCreated: false,
+        message: error.response.data
+      });
+      console.log('Error fetching and parsing data.', error);
+    }); 
+  }
+
+  //as user types in data the state is changed automatically
+  handleInput(e){
+    e.preventDefault();
+    this.setState({[e.target.name]: e.target.value});
+  } 
 
   //if successful they the user signed in auth state data is updated and the user is signed in and redirected to the home page
+  submitRedirectSignUp(){
+    if(this.state.userCreated === true){
+      //sign in user 
+
+      //redirect to home page
+      return <Redirect to='/'/>
+
+    } else if(this.state.userCreated === false && this.state.message === ''){
+        return(
+          <div className='validation-errors'>
+            <ul>
+              <li>There was an error with your information. Please check over it.</li>
+            </ul>
+          </div>
+        );
+    } else if(this.state.userCreated === false && this.state.message === 'User already exists in the system.') {
+      return( 
+        <div className='validation-errors'>
+          <ul>
+            <li>User already exists in the system.</li>
+          </ul>
+        </div>
+      );
+    } else if(this.state.message === 'notEqual') {
+      return( 
+        <div className='validation-errors'>
+          <ul>
+            <li>Passwords do not match</li>
+          </ul>
+        </div>
+      );
+    } 
+
+     //else if(this.state.userCreated === false) {
+    
+    
+    //   return( 
+    //     <div className='validation-errors'>
+    //       <ul>
+    //         <li>There was an error with your information.  Please check over it. </li>
+    //       </ul>
+    //     </div>
+    //   );
+    // } else if(this.state.userCreated === 'notEqual') {
+    //   return( 
+    //     <div className='validation-errors'>
+    //       <ul>
+    //         <li>Please confirm your passwords again.</li>
+    //       </ul>
+    //     </div>
+    //   );
+    // }
+  }
 
   render() {
       return(
@@ -106,14 +211,14 @@ class UserSignUp extends Component {
               <div className="grid-33 centered signin">
                 <h1>Sign Up</h1>
                 <div>
-                  <form>
-                    <div><input id="firstName" name="firstName" type="text" className="" placeholder="First Name" value=""/></div>
-                    <div><input id="lastName" name="lastName" type="text" className="" placeholder="Last Name" value=""/></div>
-                    <div><input id="emailAddress" name="emailAddress" type="text" className="" placeholder="Email Address" value=""/></div>
-                    <div><input id="password" name="password" type="password" className="" placeholder="Password" value=""/></div>
-                    <div><input id="confirmPassword" name="confirmPassword" type="password" className="" placeholder="Confirm Password"
-                        value=""/></div>
-                    <div class="grid-100 pad-bottom"><button className="button" type="submit">Sign Up</button><Link to='/'><button class="button button-secondary">Cancel</button></Link></div>
+                  {this.submitRedirectSignUp()}
+                  <form onSubmit={(e)=>{this.signUp(e,this.state.firstName, this.state.lastName, this.state.emailAddress, this.state.password, this.state.confirmPassword)}}>
+                    <div><input id="firstName" name="firstName" type="text" className="" placeholder="First Name" onChange={(e) => this.handleInput(e)}/></div>
+                    <div><input id="lastName" name="lastName" type="text" className="" placeholder="Last Name" onChange={(e) => this.handleInput(e)}/></div>
+                    <div><input id="emailAddress" name="emailAddress" type="text" className="" placeholder="Email Address" onChange={(e) => this.handleInput(e)}/></div>
+                    <div><input id="password" name="password" type="password" className="" placeholder="Password" onChange={(e) => this.handleInput(e)}/></div>
+                    <div><input id="confirmPassword" name="confirmPassword" type="password" className="" placeholder="Confirm Password" onChange={(e) => this.handleInput(e)}/></div>
+                    <div className="grid-100 pad-bottom"><button className="button" type="submit">Sign Up</button><Link to='/'><button className="button button-secondary">Cancel</button></Link></div>
                   </form>
                 </div>
                 <p>&nbsp;</p>
@@ -155,7 +260,13 @@ class UserSignIn extends Component {
     if(this.state.isAuth === 'true'){
       return <Redirect to='/'/>
     } else if(this.state.isAuth === 'false') {
-      return <p>Invalid Username or Password</p>
+      return( 
+        <div className='validation-errors'>
+          <ul>
+            <li>Invalid Username or Password</li>
+          </ul>
+        </div>
+      );
     }
   }
 
