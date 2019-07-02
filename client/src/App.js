@@ -133,8 +133,6 @@ class UserSignUp extends Component {
     })
     .catch(error => {
       //If the API returns an error the userCreated state is changed to false and an error is displayed
-
-      console.log(error.response.data.message);
       this.setState({
         userCreated: false,
         message: error.response.data.message
@@ -149,7 +147,7 @@ class UserSignUp extends Component {
     this.setState({[e.target.name]: e.target.value});
   } 
 
-  //if successful they the user signed in auth state data is updated and the user is signed in and redirected to the home page
+  //if successful then the user signed in auth state data is updated and the user is signed in and redirected to the home page
   submitRedirectSignUp(){
     if(this.state.userCreated === true){
       //sign in user 
@@ -165,43 +163,7 @@ class UserSignUp extends Component {
             </ul>
           </div>
         );
-    }// } else if(this.state.userCreated === false && this.state.message === 'User already exists in the system.') {
-    //   return( 
-    //     <div className='validation-errors'>
-    //       <ul>
-    //         <li>User already exists in the system.</li>
-    //       </ul>
-    //     </div>
-    //   );
-    // } else if(this.state.message === 'notEqual') {
-    //   return( 
-    //     <div className='validation-errors'>
-    //       <ul>
-    //         <li>Passwords do not match</li>
-    //       </ul>
-    //     </div>
-    //   );
-    // } 
-
-     //else if(this.state.userCreated === false) {
-    
-    
-    //   return( 
-    //     <div className='validation-errors'>
-    //       <ul>
-    //         <li>There was an error with your information.  Please check over it. </li>
-    //       </ul>
-    //     </div>
-    //   );
-    // } else if(this.state.userCreated === 'notEqual') {
-    //   return( 
-    //     <div className='validation-errors'>
-    //       <ul>
-    //         <li>Please confirm your passwords again.</li>
-    //       </ul>
-    //     </div>
-    //   );
-    // }
+    }
   }
 
   render() {
