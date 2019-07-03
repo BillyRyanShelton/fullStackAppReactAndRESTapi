@@ -129,7 +129,7 @@ class UserSignUp extends Component {
     .then((response)=>{
       console.log(response);
       //If the API returns a 201 the user has been created
-      this.props.userLoggedIn(this.state.firstName, this.state.lastName, this.state.emailAddress, this.state.password);
+      this.props.userLoggedIn(this.state.emailAddress, this.state.password, this.state.firstName, this.state.lastName);
       this.setState({userCreated: true});
     })
     .catch((error) => {
