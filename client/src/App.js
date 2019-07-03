@@ -444,11 +444,12 @@ class UpdateCourse extends Component {
       title: '',
       description: '',
       estimatedTime:'',
-      materials:'',
+      materialsNeeded:'',
       id: ''
     }
-    this.handleChangeDescription = this.handleChangeDescription.bind(this);
-    this.handleChangeMaterials = this.handleChangeMaterials.bind(this);
+    // this.handleChangeDescription = this.handleChangeDescription.bind(this);
+    // this.handleChangeMaterials = this.handleChangeMaterials.bind(this);
+    this.handleInput = this.handleInput.bind(this);
   }
 
   //course detail is retrived from the database
@@ -465,7 +466,7 @@ class UpdateCourse extends Component {
         title:courseData.title,
         description:courseData.description,
         estimatedTime: courseData.estimatedTime,
-        materials: courseData.materialsNeeded,
+        materialsNeeded: courseData.materialsNeeded,
         id: courseData.id
       });
     })
@@ -474,18 +475,23 @@ class UpdateCourse extends Component {
     }); 
   }
 
-  handleChangeDescription(e){
-    this.setState({description: e.target.value});
-  }
-  handleChangeMaterials(e){
-    this.setState({materials: e.target.value});
-  }
+  // handleChangeDescription(e){
+  //   this.setState({description: e.target.value});
+  // }
+  // handleChangeMaterials(e){
+  //   this.setState({materials: e.target.value});
+  // }
+
+  handleInput(e){
+    e.preventDefault();
+    this.setState({[e.target.name]: e.target.value});
+  } 
 
   render() {
       return(
         <div id="root">
           <div>
-            <Header userInfo = {this.props}/>
+            <Header userInfo = {this.props.userInfo}/>
             <hr />
             <div className="bounds course--detail">
               <h1>Update Course</h1>
@@ -494,11 +500,11 @@ class UpdateCourse extends Component {
                   <div className="grid-66">
                     <div className="course--header">
                       <h4 className="course--label">Course</h4>
-                      <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." defaultValue={this.state.title} /></div>
+                      <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." value={this.state.title} onChange={this.handleInput} /></div>
                       <p>By: {this.state.name}</p>
                     </div>
                     <div className="course--description">
-                      <div><textarea id="description" name="description" className="" placeholder="Course description..." value={this.state.description} onChange={this.handleChangeDescription}/></div>
+                      <div><textarea id="description" name="description" className="" placeholder="Course description..." value={this.state.description} onChange={this.handleInput}/></div>
                     </div>
                   </div>
                   <div className="grid-25 grid-right">
@@ -506,11 +512,11 @@ class UpdateCourse extends Component {
                       <ul className="course--stats--list">
                         <li className="course--stats--list--item">
                           <h4>Estimated Time</h4>
-                          <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours" defaultValue={this.state.estimatedTime} /></div>
+                          <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours" value={this.state.estimatedTime} onChange={this.handleInput}/></div>
                         </li>
                         <li className="course--stats--list--item">
                           <h4>Materials Needed</h4>
-                          <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." value={this.state.materials} onChange={this.handleChangeMaterials} /></div>
+                          <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." value={this.state.materialsNeeded} onChange={this.handleInput}/></div>
                         </li>
                       </ul>
                     </div>
