@@ -4,6 +4,25 @@ import axios from 'axios';
 import {Redirect } from 'react-router'
 
 
+
+class PrivateRoute extends Component {
+  render(){
+    let signedIn;
+    if(this.props.userInfo.userLoggedIn != ''){
+      signedIn = <this.props.component userInfo={this.props.userInfo}/>
+    } else{
+      signedIn = <Redirect to="/signin" />
+    }
+    return (
+     <Route> {signedIn}</Route>
+    );
+  }
+}
+
+
+
+
+
 class NotFound extends Component {
 
 render() {
@@ -710,12 +729,14 @@ class App extends Component {
   }
 
  //onSearch={this.performSearch}
+
+ //<Route exact path='/courses/create' render={()=> <CreateCourse userInfo={this.state}/> }/>
   render() {
     return(
       <BrowserRouter>
         <Switch>
           <Route exact path='/' render={()=> <Courses userInfo={this.state}/> }/>
-          <Route exact path='/courses/create' render={()=> <CreateCourse userInfo={this.state}/> }/>
+          <PrivateRoute exact path='/courses/create' component={CreateCourse} userInfo={this.state} />
           <Route exact path='/courses/:id/update' render={()=> <UpdateCourse userInfo={this.state}/> }/>
           <Route exact path='/courses/:id' render={(props)=> <CourseDetail userInfo={this.state} {...props}/> }/>
           <Route exact path='/signin' render={()=> <UserSignIn userLoggedIn={this.userLoggedIn} userInfo={this.state}/> }/>
