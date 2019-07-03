@@ -247,7 +247,8 @@ class UserSignIn extends Component {
       }
     })
     .then((response)=>{
-      this.props.userLoggedIn(response.data.username, response.data.password, response.data.firstName, response.data.lastName);
+      console.log(response);
+      this.props.userLoggedIn(response.data.emailAddress, response.data.password, response.data.firstName, response.data.lastName);
       this.setState({isAuth: 'true'});
     })
     .catch(error => {
@@ -302,25 +303,30 @@ class UserSignIn extends Component {
 
 class CourseDetail extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       courseData: '',
       name: '',
       title: '',
       estimatedTime:'',
-      materials:''
-    }
+      materials:'',
+      id: '',
+      userId:'',
+      courseOwner:'',
+    };
+    this.changeCourse = this.changeCourse.bind(this);
   }
 
-  //course detail is retrived from the database
+
   componentDidMount() {
     const id = this.props.match.params.id;
-    console.log(id);
+   //console.log(id);
 
+   //course information is retrieved
     axios.get(`http://localhost:5000/api/courses/${id}`).then((response) => {
       const courseData = response.data.course;
-      console.log(courseData);
+      //console.log(courseData);
       this.setState({
         courseData: courseData,
         name: courseData.User.firstName + ' ' + courseData.User.lastName,
@@ -328,64 +334,95 @@ class CourseDetail extends Component {
         description:courseData.description,
         estimatedTime: courseData.estimatedTime,
         materials: courseData.materialsNeeded,
-        id: courseData.id
+        id: courseData.id,
+        userId: courseData.userId
       });
     })
     .catch(error => {
       console.log('Error fetching and parsing data.', error);
     }); 
+
+
+    //user information is retrieved to see if user created the course
+    if(this.props.userInfo.userLoggedIn === 'true'){
+      axios.get('http://localhost:5000/api/users', {
+        auth: {
+          username: this.props.userInfo.username,
+          password: this.props.userInfo.password,
+        }
+      })
+      .then((response)=>{
+        if(response.data.id === this.state.userId){
+          this.setState({courseOwner: 'true'})
+        }
+      })
+      .catch(error => {
+          console.log('Error fetching and parsing data.', error);
+      }); 
+    }
+
+  }
+
+
+  changeCourse(){
+    if(this.state.courseOwner === 'true'){
+      return (
+        <span>
+          <Link to={'/courses/' + this.state.id + '/update'} className="button">Update Course</Link>
+          <a className="button" href="#">Delete Course</a>
+        </span>
+      );
+    }
   }
 
   render() {
-      return(
-        <div id="root">
+    return(
+      <div id="root">
+        <div>
+          <Header userInfo = {this.props}/>
+          <hr/>
           <div>
-            <Header userInfo = {this.props}/>
-            <hr/>
-            <div>
-              <div className="actions--bar">
-                <div className="bounds">
-                  <div className="grid-100">
-                    <span>
-                      <Link to={'/courses/' + this.state.id + '/update'} className="button">Update Course</Link>
-                      <a className="button" href="#">Delete Course</a></span>
-                      <Link to="/" className="button button-secondary">Return to List</Link>
-                  </div>
+            <div className="actions--bar">
+              <div className="bounds">
+                <div className="grid-100">
+                    {this.changeCourse()}
+                    <Link to="/" className="button button-secondary">Return to List</Link>
                 </div>
               </div>
-              <div className="bounds course--detail">
-                <div className="grid-66">
-                  <div className="course--header">
-                    <h4 className="course--label">Course</h4>
-                    <h3 className="course--title">{this.state.title}</h3>
-                    <p>By: {this.state.name}</p>
-                  </div>
-                  <div className="course--description">
-                    <p>{this.state.description}</p>
-                  </div>
+            </div>
+            <div className="bounds course--detail">
+              <div className="grid-66">
+                <div className="course--header">
+                  <h4 className="course--label">Course</h4>
+                  <h3 className="course--title">{this.state.title}</h3>
+                  <p>By: {this.state.name}</p>
                 </div>
-                <div className="grid-25 grid-right">
-                  <div className="course--stats">
-                    <ul className="course--stats--list">
-                      <li className="course--stats--list--item">
-                        <h4>Estimated Time</h4>
-                        <h3>{this.state.estimatedTime}</h3>
-                      </li>
-                      <li className="course--stats--list--item">
-                        <h4>Materials Needed</h4>
-                        <ul>
-                          <li>{this.state.materials}</li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </div>
+                <div className="course--description">
+                  <p>{this.state.description}</p>
+                </div>
+              </div>
+              <div className="grid-25 grid-right">
+                <div className="course--stats">
+                  <ul className="course--stats--list">
+                    <li className="course--stats--list--item">
+                      <h4>Estimated Time</h4>
+                      <h3>{this.state.estimatedTime}</h3>
+                    </li>
+                    <li className="course--stats--list--item">
+                      <h4>Materials Needed</h4>
+                      <ul>
+                        <li>{this.state.materials}</li>
+                      </ul>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      );
-    }
+      </div>
+    );
+  }
 }
 // // export default App
 
@@ -398,8 +435,8 @@ class CourseDetail extends Component {
 
 class UpdateCourse extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       courseData: '',
       name: '',
