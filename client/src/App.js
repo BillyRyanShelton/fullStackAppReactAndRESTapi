@@ -313,7 +313,7 @@ class CourseDetail extends Component {
       materials:'',
       id: '',
       userId:'',
-      courseOwner:'',
+      userEmail:''
     };
     this.changeCourse = this.changeCourse.bind(this);
   }
@@ -335,37 +335,18 @@ class CourseDetail extends Component {
         estimatedTime: courseData.estimatedTime,
         materials: courseData.materialsNeeded,
         id: courseData.id,
-        userId: courseData.userId
+        userId: courseData.userId,
+        userEmail: courseData.User.emailAddress
       });
     })
     .catch(error => {
       console.log('Error fetching and parsing data.', error);
     }); 
-
-
-    //user information is retrieved to see if user created the course
-    if(this.props.userInfo.userLoggedIn === 'true'){
-      axios.get('http://localhost:5000/api/users', {
-        auth: {
-          username: this.props.userInfo.username,
-          password: this.props.userInfo.password,
-        }
-      })
-      .then((response)=>{
-        if(response.data.id === this.state.userId){
-          this.setState({courseOwner: 'true'})
-        }
-      })
-      .catch(error => {
-          console.log('Error fetching and parsing data.', error);
-      }); 
-    }
-
   }
 
 
   changeCourse(){
-    if(this.state.courseOwner === 'true'){
+    if(this.props.userInfo.username === this.state.userEmail){
       return (
         <span>
           <Link to={'/courses/' + this.state.id + '/update'} className="button">Update Course</Link>
