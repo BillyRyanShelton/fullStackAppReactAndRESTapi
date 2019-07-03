@@ -8,8 +8,9 @@ import {Redirect } from 'react-router'
 class PrivateRoute extends Component {
   render(){
     let signedIn;
+    console.log(this.props);
     if(this.props.userInfo.userLoggedIn != ''){
-      signedIn = <this.props.component userInfo={this.props.userInfo}/>
+      signedIn = <this.props.component userInfo={this.props}/>
     } else{
       signedIn = <Redirect to="/signin" />
     }
@@ -452,7 +453,7 @@ class UpdateCourse extends Component {
 
   //course detail is retrived from the database
   componentDidMount() {
-    const id = this.props.match.params.id;
+    const id = this.props.userInfo.computedMatch.params.id;
     //console.log(id);
 
     axios.get(`http://localhost:5000/api/courses/${id}`).then((response) => {
@@ -514,7 +515,7 @@ class UpdateCourse extends Component {
                       </ul>
                     </div>
                   </div>
-                  <div className="grid-100 pad-bottom"><button className="button" type="submit">Update Course</button><Link to={"/courses/" + this.props.match.params.id}><button className="button button-secondary">Cancel</button></Link></div>
+                  <div className="grid-100 pad-bottom"><button className="button" type="submit">Update Course</button><Link to={"/courses/" + this.props.userInfo.computedMatch.params.id}><button className="button button-secondary">Cancel</button></Link></div>
                 </form>
               </div>
             </div>
@@ -731,13 +732,16 @@ class App extends Component {
  //onSearch={this.performSearch}
 
  //<Route exact path='/courses/create' render={()=> <CreateCourse userInfo={this.state}/> }/>
+ //<Route exact path='/courses/:id/update' render={()=> <UpdateCourse userInfo={this.state}/> }/>
+ //<Route exact path='/courses/:id/update' render={(props)=> <UpdateCourse userInfo={this.state} {...props}/> }/>
+ //<PrivateRoute exact path='/courses/:id/update' component={UpdateCourse} userInfo={this.state} />
   render() {
     return(
       <BrowserRouter>
         <Switch>
           <Route exact path='/' render={()=> <Courses userInfo={this.state}/> }/>
           <PrivateRoute exact path='/courses/create' component={CreateCourse} userInfo={this.state} />
-          <Route exact path='/courses/:id/update' render={()=> <UpdateCourse userInfo={this.state}/> }/>
+          <PrivateRoute exact path='/courses/:id/update' component={UpdateCourse} userInfo={this.state} />
           <Route exact path='/courses/:id' render={(props)=> <CourseDetail userInfo={this.state} {...props}/> }/>
           <Route exact path='/signin' render={()=> <UserSignIn userLoggedIn={this.userLoggedIn} userInfo={this.state}/> }/>
           <Route exact path='/signup' render={()=><UserSignUp userInfo={this.state} userLoggedIn={this.userLoggedIn}/> }/>
