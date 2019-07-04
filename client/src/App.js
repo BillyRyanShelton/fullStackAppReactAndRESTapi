@@ -177,12 +177,12 @@ class UserSignUp extends Component {
     } //if user creation failed, the error is displayed
     else if(this.state.userCreated === false){
       let errors = this.state.message.split(',');
-      let parsedErrors = errors.map((error)=> <li>{error}</li> );
+      let parsedErrors = errors.map((error,i)=> <li key={`signinErr-${i}`}>{error}</li> );
       console.log(errors);
       return(
         <div className='validation-errors'>
           <ul>
-            <li>{parsedErrors}</li>
+            {parsedErrors}
           </ul>
         </div>
       );
@@ -333,9 +333,11 @@ class CourseDetail extends Component {
       materials:'',
       id: '',
       userId:'',
-      userEmail:''
+      userEmail:'',
+      isCourseDeleted: ''
     };
     this.changeCourse = this.changeCourse.bind(this);
+    this.deleteCourse = this.deleteCourse.bind(this);
   }
 
 
@@ -366,14 +368,34 @@ class CourseDetail extends Component {
 
 
   changeCourse(){
-    if(this.props.userInfo.username === this.state.userEmail){
+    if(this.state.isCourseDeleted ==='true'){
+        return(
+          <Redirect to='/'/>
+        );
+    }
+    else if(this.props.userInfo.username === this.state.userEmail){
       return (
         <span>
           <Link to={'/courses/' + this.state.id + '/update'} className="button">Update Course</Link>
-          <a className="button" href="#">Delete Course</a>
+          <a onClick = {this.deleteCourse} className="button">Delete Course</a>
         </span>
       );
-    }
+    } 
+  }
+
+  deleteCourse(){
+    var result = window.confirm("Warning!  Are you sure you want to delete this course?");
+    if (result) {
+      axios.delete(`http://localhost:5000/api/courses/${this.state.id}`, {
+        auth: {
+          username: this.props.userInfo.username,
+          password: this.props.userInfo.password,
+        }
+      })
+      .then(()=>{
+        this.setState({isCourseDeleted:'true'})
+      });
+    } 
   }
 
   render() {
@@ -446,7 +468,7 @@ class UpdateCourse extends Component {
       estimatedTime:'',
       materialsNeeded:'',
       id: '',
-      updated:''
+      updated:'',
     }
     // this.handleChangeDescription = this.handleChangeDescription.bind(this);
     // this.handleChangeMaterials = this.handleChangeMaterials.bind(this);
@@ -484,7 +506,7 @@ class UpdateCourse extends Component {
   } 
 
   updateCourseData(e){
-    console.log(this.props.userInfo.userInfo.password);
+    //console.log(this.props.userInfo.userInfo.password);
     e.preventDefault();
     axios({
       method:'put',
@@ -504,6 +526,10 @@ class UpdateCourse extends Component {
       this.setState({updated: 'true'});
     })
     .catch(error => {
+      console.log(error.response);
+      this.setState({
+        updated: 'false'
+        });
         console.log('Error fetching and parsing data.', error);
     }); 
   }
@@ -513,6 +539,16 @@ class UpdateCourse extends Component {
     if(this.state.updated === 'true'){
       this.setState({updated: ''});
       return <Redirect to={'/courses/'+ this.props.userInfo.computedMatch.params.id}/>
+    } else if(this.state.updated === 'false'){
+      
+      //let parsedErrors = errors.map((error, i)=> <li key={`updateErr-${i}`}>{error}</li> );
+      return(
+        <div className='validation-errors'>
+          <ul>
+            <li>{'Please provide a value for Title and Description'}</li>
+          </ul>
+        </div>
+      );
     }
   }
 
