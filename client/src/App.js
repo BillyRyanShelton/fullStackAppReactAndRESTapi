@@ -445,11 +445,14 @@ class UpdateCourse extends Component {
       description: '',
       estimatedTime:'',
       materialsNeeded:'',
-      id: ''
+      id: '',
+      updated:''
     }
     // this.handleChangeDescription = this.handleChangeDescription.bind(this);
     // this.handleChangeMaterials = this.handleChangeMaterials.bind(this);
     this.handleInput = this.handleInput.bind(this);
+    this.updateCourseData = this.updateCourseData.bind(this);
+    this.updateRedirect = this.updateRedirect.bind(this);
   }
 
   //course detail is retrived from the database
@@ -475,17 +478,43 @@ class UpdateCourse extends Component {
     }); 
   }
 
-  // handleChangeDescription(e){
-  //   this.setState({description: e.target.value});
-  // }
-  // handleChangeMaterials(e){
-  //   this.setState({materials: e.target.value});
-  // }
-
   handleInput(e){
     e.preventDefault();
     this.setState({[e.target.name]: e.target.value});
   } 
+
+  updateCourseData(e){
+    console.log(this.props.userInfo.userInfo.password);
+    e.preventDefault();
+    axios({
+      method:'put',
+      url: `http://localhost:5000/api/courses/${this.state.id}`,
+      auth: {
+        username: this.props.userInfo.userInfo.username,
+        password: this.props.userInfo.userInfo.password
+      },
+      data:{
+        title: this.state.title,
+        description: this.state.description,
+        estimatedTime: this.state.estimatedTime,
+        materialsNeeded: this.state.materialsNeeded
+      }
+    })
+    .then((response)=>{
+      this.setState({updated: 'true'});
+    })
+    .catch(error => {
+        console.log('Error fetching and parsing data.', error);
+    }); 
+  }
+
+
+  updateRedirect(){
+    if(this.state.updated === 'true'){
+      this.setState({updated: ''});
+      return <Redirect to={'/courses/'+ this.props.userInfo.computedMatch.params.id}/>
+    }
+  }
 
   render() {
       return(
@@ -496,7 +525,8 @@ class UpdateCourse extends Component {
             <div className="bounds course--detail">
               <h1>Update Course</h1>
               <div>
-                <form>
+                {this.updateRedirect()}
+                <form onSubmit={this.updateCourseData}>
                   <div className="grid-66">
                     <div className="course--header">
                       <h4 className="course--label">Course</h4>
