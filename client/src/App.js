@@ -469,6 +469,7 @@ class UpdateCourse extends Component {
       materialsNeeded:'',
       id: '',
       updated:'',
+      message:''
     }
     // this.handleChangeDescription = this.handleChangeDescription.bind(this);
     // this.handleChangeMaterials = this.handleChangeMaterials.bind(this);
@@ -528,27 +529,46 @@ class UpdateCourse extends Component {
     .catch(error => {
       console.log(error.response);
       this.setState({
-        updated: 'false'
+        updated: 'false',
+        message: error.response.data.error
         });
         console.log('Error fetching and parsing data.', error);
     }); 
   }
 
 
-  updateRedirect(){
+  // updateRedirect(){
+  //   if(this.state.updated === 'true'){
+  //     this.setState({updated: ''});
+  //     return <Redirect to={'/courses/'+ this.props.userInfo.computedMatch.params.id}/>
+  //   } else if(this.state.updated === 'false'){
+      
+  //     //let parsedErrors = errors.map((error, i)=> <li key={`updateErr-${i}`}>{error}</li> );
+  //     return(
+  //       <div className='validation-errors'>
+  //         <ul>
+  //           <li>{'Please provide a value for Title and Description'}</li>
+  //         </ul>
+  //       </div>
+  //     );
+  //   }
+  // }
+
+    updateRedirect(){
     if(this.state.updated === 'true'){
       this.setState({updated: ''});
       return <Redirect to={'/courses/'+ this.props.userInfo.computedMatch.params.id}/>
     } else if(this.state.updated === 'false'){
-      
-      //let parsedErrors = errors.map((error, i)=> <li key={`updateErr-${i}`}>{error}</li> );
+      let errors = this.state.message.split(',');
+      let parsedErrors = errors.map((error,i)=> <li key={`updateErr-${i}`}>{error}</li> );
+      console.log(parsedErrors);
       return(
         <div className='validation-errors'>
           <ul>
-            <li>{'Please provide a value for Title and Description'}</li>
+            {parsedErrors}
           </ul>
         </div>
-      );
+      );    
     }
   }
 
@@ -667,7 +687,7 @@ class CreateCourse extends Component {
       return <Redirect to='/'/>
     } else if(this.state.updated === 'false'){
       let errors = this.state.message.split(',');
-      let parsedErrors = errors.map((error,i)=> <li key={`signinErr-${i}`}>{error}</li> );
+      let parsedErrors = errors.map((error,i)=> <li key={`createCourseErr-${i}`}>{error}</li> );
       console.log(errors);
       return(
         <div className='validation-errors'>
