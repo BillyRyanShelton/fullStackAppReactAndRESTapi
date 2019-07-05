@@ -22,10 +22,12 @@ class UserSignIn extends Component {
     
   }
 
+  //once the user is logged in they are redirected to the home page
   submitRedirect(){
     if(this.state.isAuth === 'true'){
       return <Redirect to='/'/>
-    } else if(this.state.isAuth === 'false') {
+    } //if user sign in is unsuccessful, validation errors are displayed 
+    else if(this.state.isAuth === 'false') {
       return( 
         <div className='validation-errors'>
           <ul>
@@ -36,6 +38,8 @@ class UserSignIn extends Component {
     }
   }
 
+  //a request is made to the api to sign the user in with props passed down from the app component. If errors
+  //are returned then they are displayed for the user to correct
   signIn(e,email, password){
     e.preventDefault();
     axios.get('http://localhost:5000/api/users', {
@@ -54,13 +58,14 @@ class UserSignIn extends Component {
     }); 
   }
 
+  //when onChange events are triggered, this function allows the set to be changed 
+  //according to the target name and target value
   handleInput(e){
     e.preventDefault();
     this.setState({[e.target.name]: e.target.value});
   } 
 
   render() {
-
     return(
       <div id="root">
           <div>

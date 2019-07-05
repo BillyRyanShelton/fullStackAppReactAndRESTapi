@@ -27,6 +27,7 @@ class UserSignUp extends Component {
   }
 
 
+  //a request is made to the api to create a new user account, if unsuccessful validation errors are thrown
   signUp(e,first, last, email, password, confirmPassword){
     e.preventDefault();
 
