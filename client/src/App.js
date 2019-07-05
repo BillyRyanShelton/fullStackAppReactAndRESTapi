@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
 import axios from 'axios';
 import {Redirect } from 'react-router'
+import ReactMarkdown from 'react-markdown'
 
 
 
@@ -9,7 +10,7 @@ class PrivateRoute extends Component {
   render(){
     let signedIn;
     console.log(this.props);
-    if(this.props.userInfo.userLoggedIn != ''){
+    if(this.props.userInfo.userLoggedIn !== ''){
       signedIn = <this.props.component userInfo={this.props}/>
     } else{
       signedIn = <Redirect to="/signin" />
@@ -421,7 +422,7 @@ class CourseDetail extends Component {
                   <p>By: {this.state.name}</p>
                 </div>
                 <div className="course--description">
-                  <p>{this.state.description}</p>
+                  <p><ReactMarkdown source={this.state.description}/></p>
                 </div>
               </div>
               <div className="grid-25 grid-right">
@@ -433,9 +434,9 @@ class CourseDetail extends Component {
                     </li>
                     <li className="course--stats--list--item">
                       <h4>Materials Needed</h4>
-                      <ul>
-                        <li>{this.state.materials}</li>
-                      </ul>
+                      
+                        <ReactMarkdown source={this.state.materials}/>
+                      
                     </li>
                   </ul>
                 </div>
@@ -536,23 +537,6 @@ class UpdateCourse extends Component {
     }); 
   }
 
-
-  // updateRedirect(){
-  //   if(this.state.updated === 'true'){
-  //     this.setState({updated: ''});
-  //     return <Redirect to={'/courses/'+ this.props.userInfo.computedMatch.params.id}/>
-  //   } else if(this.state.updated === 'false'){
-      
-  //     //let parsedErrors = errors.map((error, i)=> <li key={`updateErr-${i}`}>{error}</li> );
-  //     return(
-  //       <div className='validation-errors'>
-  //         <ul>
-  //           <li>{'Please provide a value for Title and Description'}</li>
-  //         </ul>
-  //       </div>
-  //     );
-  //   }
-  // }
 
     updateRedirect(){
     if(this.state.updated === 'true'){
