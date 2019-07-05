@@ -9,7 +9,6 @@ import ReactMarkdown from 'react-markdown'
 class PrivateRoute extends Component {
   render(){
     let signedIn;
-    console.log(this.props);
     if(this.props.userInfo.userLoggedIn !== ''){
       signedIn = <this.props.component userInfo={this.props}/>
     } else{
@@ -44,56 +43,7 @@ render() {
 }
 // export default App
 
-
-
-
-class Forbidden extends Component {
-
-render() {
-    return(
-      <div id="root">
-        <div>
-          <Header userInfo = {this.props}/>
-          <hr/>
-          <div class="bounds">
-            <h1>Forbidden</h1>
-            <p>Oh oh! You can't access this page.</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-// export default App
-
-
-
-class Error extends Component {
-
-render() {
-    return(
-      <div id="root">
-        <div>
-          <Header userInfo = {this.props}/>
-          <hr/>
-          <div class="bounds">
-            <h1>Error</h1>
-            <p>Sorry! We just encountered an unexpected error.</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-// export default App
-
-
-
-
 class UserSignOut extends Component {
-  constructor(props){
-    super(props);
-  }
 
 render() {
     this.props.userLoggedOut();
@@ -268,7 +218,6 @@ class UserSignIn extends Component {
       }
     })
     .then((response)=>{
-      console.log(response);
       this.props.userLoggedIn(response.data.emailAddress, response.data.password, response.data.firstName, response.data.lastName);
       this.setState({isAuth: 'true'});
     })
@@ -378,7 +327,7 @@ class CourseDetail extends Component {
       return (
         <span>
           <Link to={'/courses/' + this.state.id + '/update'} className="button">Update Course</Link>
-          <a onClick = {this.deleteCourse} className="button">Delete Course</a>
+          <button onClick = {this.deleteCourse} className="button">Delete Course</button>
         </span>
       );
     } 
@@ -422,7 +371,7 @@ class CourseDetail extends Component {
                   <p>By: {this.state.name}</p>
                 </div>
                 <div className="course--description">
-                  <p><ReactMarkdown source={this.state.description}/></p>
+                  <ReactMarkdown source={this.state.description}/>
                 </div>
               </div>
               <div className="grid-25 grid-right">
@@ -810,7 +759,7 @@ class Header extends Component {
 render() {
   //console.log(this.props.userInfo.userInfo);
   let ifLoggedIn;
-  if(this.props.userInfo.userInfo.userLoggedIn != ''){
+  if(this.props.userInfo.userInfo.userLoggedIn !== ''){
     ifLoggedIn =  <nav><span>Welcome {this.props.userInfo.userInfo.first} {this.props.userInfo.userInfo.last}!</span><Link to="/signout">Sign Out</Link></nav>;
   } else{
     ifLoggedIn = <nav><a className="signup" href="/signup">Sign Up</a><a className="signin" href="/signin">Sign In</a></nav>
@@ -860,22 +809,16 @@ class App extends Component {
       });
   }
 
-    userLoggedOut(){
-      this.setState({
-        userLoggedIn: '',
-        username: '',
-        password: '',
-        first: '',
-        last: ''
-      });
+  userLoggedOut(){
+    this.setState({
+      userLoggedIn: '',
+      username: '',
+      password: '',
+      first: '',
+      last: ''
+    });
   }
 
- //onSearch={this.performSearch}
-
- //<Route exact path='/courses/create' render={()=> <CreateCourse userInfo={this.state}/> }/>
- //<Route exact path='/courses/:id/update' render={()=> <UpdateCourse userInfo={this.state}/> }/>
- //<Route exact path='/courses/:id/update' render={(props)=> <UpdateCourse userInfo={this.state} {...props}/> }/>
- //<PrivateRoute exact path='/courses/:id/update' component={UpdateCourse} userInfo={this.state} />
   render() {
     return(
       <BrowserRouter>
@@ -887,6 +830,7 @@ class App extends Component {
           <Route exact path='/signin' render={()=> <UserSignIn userLoggedIn={this.userLoggedIn} userInfo={this.state}/> }/>
           <Route exact path='/signup' render={()=><UserSignUp userInfo={this.state} userLoggedIn={this.userLoggedIn}/> }/>
           <Route exact path='/signout' render={()=><UserSignOut userLoggedOut={this.userLoggedOut} /> }/>
+          <Route render={()=><NotFound userInfo={this.state} userLoggedOut={this.userLoggedOut} /> }/>
         </Switch>
       </BrowserRouter>
     );
