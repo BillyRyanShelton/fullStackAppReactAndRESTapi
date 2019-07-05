@@ -25,14 +25,14 @@ class CourseDetail extends Component {
     this.deleteCourse = this.deleteCourse.bind(this);
   }
 
-
+  //when the page is loaded, a request is made to the api for the course data and the state is changed
+  //to reflect that data
   componentDidMount() {
     const id = this.props.match.params.id;
 
    //course information is retrieved
     axios.get(`http://localhost:5000/api/courses/${id}`).then((response) => {
       const courseData = response.data.course;
-      //console.log(courseData);
       this.setState({
         courseData: courseData,
         name: courseData.User.firstName + ' ' + courseData.User.lastName,
@@ -50,13 +50,14 @@ class CourseDetail extends Component {
     }); 
   }
 
-
   changeCourse(){
+    //if the state of isCourseDeleted is true, then the course was deleted and the use is redirected to the homepage
     if(this.state.isCourseDeleted ==='true'){
         return(
           <Redirect to='/'/>
         );
-    }
+    } //if the username passed down via props matches the username from the API, then the user owns the course
+      //so the delete course and update course buttons are rendered
     else if(this.props.userInfo.username === this.state.userEmail){
       return (
         <span>
@@ -67,6 +68,8 @@ class CourseDetail extends Component {
     } 
   }
 
+  //if the delete course button is clicked, a call is made to the API to delete the course and the 
+  //state of isCourseDeleted is set to true
   deleteCourse(){
     var result = window.confirm("Warning!  Are you sure you want to delete this course?");
     if (result) {

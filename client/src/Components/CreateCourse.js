@@ -25,11 +25,15 @@ class CreateCourse extends Component {
     this.displayErrors = this.displayErrors.bind(this);
   }
 
+  //when onChange events are triggered, this function allows the set to be changed 
+  //according to the target name and target value
   handleInput(e){
     e.preventDefault();
     this.setState({[e.target.name]: e.target.value});
   } 
 
+  //this function makes a request to the API to create a course.  The username and password are required along
+  //with the course data.  If title or description are missing, validation errors are thrown
   createCourse(e){
     e.preventDefault();
     axios({
@@ -59,11 +63,14 @@ class CreateCourse extends Component {
     }); 
   }
 
+
   displayErrors(){
+    //once a course is successfully created, the user is redirected to the course detail page
     if(this.state.updated === 'true'){
       this.setState({updated: ''});
       return <Redirect to='/'/>
-    } else if(this.state.updated === 'false'){
+    } //if the course creation was unsuccessful, validation errors are displayed
+    else if(this.state.updated === 'false'){
       let errors = this.state.message.split(',');
       let parsedErrors = errors.map((error,i)=> <li key={`createCourseErr-${i}`}>{error}</li> );
       console.log(errors);

@@ -15,11 +15,10 @@ class Courses extends Component {
       data: ''
     }
   }
-  //Images are immediately loaded to the page with the props search topic
+  //a call is made to the api to load all of the present courses
   componentDidMount() {
     axios.get('http://localhost:5000/api/courses').then((response) => {
       const data = response.data.courses;
-      //console.log(data);
       this.setState({data});
     })
     .catch(error => {
@@ -29,8 +28,7 @@ class Courses extends Component {
 
 
   render() {
-
-        //If courses are returned they are stored
+      //if the courses are available they are displayed
       let data = this.state.data;
       let courses;
       if(data.length > 0) {
@@ -42,7 +40,7 @@ class Courses extends Component {
             </Link>
           </div>
         );
-      } //If no images are in the array then a Not Found message is displayed to the DOM 
+      } //if no courses are in the array then a Not Found message is displayed
       else {
         courses = <h1 className="not-found"> Not Found </h1>
       }

@@ -23,17 +23,15 @@ class UpdateCourse extends Component {
       updated:'',
       message:''
     }
-    // this.handleChangeDescription = this.handleChangeDescription.bind(this);
-    // this.handleChangeMaterials = this.handleChangeMaterials.bind(this);
     this.handleInput = this.handleInput.bind(this);
     this.updateCourseData = this.updateCourseData.bind(this);
     this.updateRedirect = this.updateRedirect.bind(this);
   }
 
-  //course detail is retrived from the database
+  //when the page is loaded, a request is made to the api for the course data and the state is changed
+  //to reflect that data
   componentDidMount() {
     const id = this.props.userInfo.computedMatch.params.id;
-    //console.log(id);
 
     axios.get(`http://localhost:5000/api/courses/${id}`).then((response) => {
       const courseData = response.data.course;
@@ -53,13 +51,16 @@ class UpdateCourse extends Component {
     }); 
   }
 
+  //when onChange events are triggered, this function allows the set to be changed 
+  //according to the target name and target value
   handleInput(e){
     e.preventDefault();
     this.setState({[e.target.name]: e.target.value});
   } 
 
+  //this function makes a request to the API to update a course.  The username and password are required along
+  //with the course data.  If title or description are missing, validation errors are thrown
   updateCourseData(e){
-    //console.log(this.props.userInfo.userInfo.password);
     e.preventDefault();
     axios({
       method:'put',
@@ -90,10 +91,12 @@ class UpdateCourse extends Component {
 
 
     updateRedirect(){
+    //once a course is successfully updated, the user is redirected to the course detail page
     if(this.state.updated === 'true'){
       this.setState({updated: ''});
       return <Redirect to={'/courses/'+ this.props.userInfo.computedMatch.params.id}/>
-    } else if(this.state.updated === 'false'){
+    } //if the update was unsuccessful, validation errors are displayed 
+    else if(this.state.updated === 'false'){
       let errors = this.state.message.split(',');
       let parsedErrors = errors.map((error,i)=> <li key={`updateErr-${i}`}>{error}</li> );
       console.log(parsedErrors);

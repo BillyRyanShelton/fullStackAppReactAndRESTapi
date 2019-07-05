@@ -32,6 +32,7 @@ class App extends Component {
     this.userLoggedOut = this.userLoggedOut.bind(this);
   }
 
+  //callback function used by the sign in component to log the user in
   userLoggedIn(username, password, first, last){
       this.setState({
         userLoggedIn: 'true',
@@ -42,6 +43,7 @@ class App extends Component {
       });
   }
 
+  //callback function used by the sign out component to log the user out
   userLoggedOut(){
     this.setState({
       userLoggedIn: '',
@@ -52,6 +54,8 @@ class App extends Component {
     });
   }
 
+  //list of available routes the user may call
+  //if route not available the last route is rendered, the not found route
   render() {
     return(
       <BrowserRouter>

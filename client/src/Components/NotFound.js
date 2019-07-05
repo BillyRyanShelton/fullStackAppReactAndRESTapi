@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import Header from './Header'
 
 
-
+//if not route is found, by default this component is displayed informing the user of the issue
 class NotFound extends Component {
 
 render() {
