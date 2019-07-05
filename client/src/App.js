@@ -608,6 +608,77 @@ class UpdateCourse extends Component {
 
 class CreateCourse extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: '',
+      description: '',
+      estimatedTime:'',
+      materialsNeeded:'',
+      id: '',
+      updated:'',
+      message: ''
+    }
+
+    this.handleInput = this.handleInput.bind(this);
+    this.displayErrors = this.displayErrors.bind(this);
+    // this.updateCourseData = this.updateCourseData.bind(this);
+    // this.updateRedirect = this.updateRedirect.bind(this);
+  }
+
+  handleInput(e){
+    e.preventDefault();
+    this.setState({[e.target.name]: e.target.value});
+  } 
+
+  createCourse(e){
+    //console.log(this.props.userInfo.userInfo.password);
+    e.preventDefault();
+    axios({
+      method:'post',
+      url: `http://localhost:5000/api/courses`,
+      auth: {
+        username: this.props.userInfo.userInfo.username,
+        password: this.props.userInfo.userInfo.password
+      },
+      data:{
+        title: this.state.title,
+        description: this.state.description,
+        estimatedTime: this.state.estimatedTime,
+        materialsNeeded: this.state.materialsNeeded
+      }
+    })
+    .then((response)=>{
+      this.setState({updated: 'true'});
+    })
+    .catch(error => {
+      console.log(error.response.data);
+      this.setState({
+        updated: 'false',
+        message: error.response.data.error
+        });
+        console.log('Error fetching and parsing data.', error);
+    }); 
+  }
+
+  displayErrors(){
+    if(this.state.updated === 'true'){
+      this.setState({updated: ''});
+      return <Redirect to='/'/>
+    } else if(this.state.updated === 'false'){
+      let errors = this.state.message.split(',');
+      let parsedErrors = errors.map((error,i)=> <li key={`signinErr-${i}`}>{error}</li> );
+      console.log(errors);
+      return(
+        <div className='validation-errors'>
+          <ul>
+            {parsedErrors}
+          </ul>
+        </div>
+      );    
+    }
+  }
+
   render() {
       return(
         <div id="root">
@@ -618,23 +689,17 @@ class CreateCourse extends Component {
               <h1>Create Course</h1>
               <div>
                 <div>
-                  <h2 className="validation--errors--label">Validation errors</h2>
-                  <div className="validation-errors">
-                    <ul>
-                      <li>Please provide a value for "Title"</li>
-                      <li>Please provide a value for "Description"</li>
-                    </ul>
-                  </div>
+                {this.displayErrors()}
                 </div>
-                <form>
+                <form onSubmit={(e)=>{this.createCourse(e)}}>
                   <div className="grid-66">
                     <div className="course--header">
                       <h4 className="course--label">Course</h4>
-                      <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." /></div>
-                      <p>By Joe Smith</p>
+                      <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." onChange={this.handleInput}/></div>
+                      <p>By {this.props.userInfo.userInfo.first} {this.props.userInfo.userInfo.last}</p>
                     </div>
                     <div className="course--description">
-                      <div><textarea id="description" name="description" className="" placeholder="Course description..." defaultValue={""} /></div>
+                      <div><textarea id="description" name="description" className="" placeholder="Course description..." onChange={this.handleInput}/></div>
                     </div>
                   </div>
                   <div className="grid-25 grid-right">
@@ -642,11 +707,11 @@ class CreateCourse extends Component {
                       <ul className="course--stats--list">
                         <li className="course--stats--list--item">
                           <h4>Estimated Time</h4>
-                          <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours"/></div>
+                          <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours" onChange={this.handleInput}/></div>
                         </li>
                         <li className="course--stats--list--item">
                           <h4>Materials Needed</h4>
-                          <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." defaultValue={""} /></div>
+                          <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." onChange={this.handleInput} /></div>
                         </li>
                       </ul>
                     </div>
