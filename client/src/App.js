@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
-import axios from 'axios';
-import {Redirect } from 'react-router'
-import ReactMarkdown from 'react-markdown'
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import PrivateRoute from './Components/PrivateRoute';
 import NotFound from './Components/NotFound';
 import UserSignOut from './Components/UserSignOut';
@@ -12,8 +9,6 @@ import CourseDetail from './Components/CourseDetail';
 import UpdateCourse from './Components/UpdateCourse';
 import CreateCourse from './Components/CreateCourse';
 import Courses from './Components/Courses';
-import Header from './Components/Header'
-
 
 
 class App extends Component {

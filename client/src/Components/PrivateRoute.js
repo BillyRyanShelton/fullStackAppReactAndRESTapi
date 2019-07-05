@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
-import axios from 'axios';
+import {Route} from 'react-router-dom';
 import {Redirect } from 'react-router'
-import ReactMarkdown from 'react-markdown'
-
 
 //this route checks to see if a user is signed in before being able to access the link which the user clicked on
 //more specifically it was used on the create course route and courses/:id/update route
